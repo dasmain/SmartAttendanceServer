@@ -1,4 +1,4 @@
-import AdminDAO from "../data/user_dao.mjs";
+import AdminDAO from "../data/admin_dao.mjs";
 import AuthUtil from "../utility/auth_util.mjs";
 import PatternUtil from "../utility/pattern_util.mjs";
 import TokenUtil from "../utility/token_util.mjs";
