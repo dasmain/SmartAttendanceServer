@@ -1,22 +1,22 @@
 import databaseConfig from "../config/database_config.mjs";
 
-let usercon;
+let admincon;
 
-export default class UserDAO {
+export default class AdminDAO {
   static async injectDB(conn) {
-    if (usercon) {
+    if (admincon) {
       return;
     }
     try {
-      usercon = conn.db(databaseConfig.database.dbName).collection("users");
+      admincon = conn.db(databaseConfig.database.dbName).collection("admin");
     } catch (e) {
       console.error(`Unable to establish a collection handle: ${e}`);
     }
   }
 
-  static async addUserToDB(user) {
+  static async addAdminToDB(user) {
     try {
-      const insertionResult = await usercon.insertOne(user);
+      const insertionResult = await admincon.insertOne(user);
       if (insertionResult && insertionResult.insertedId) {
         return insertionResult.insertedId;
       } else {
@@ -28,9 +28,9 @@ export default class UserDAO {
     }
   }
 
-  static async getUserByEmailFromDB(email) {
+  static async getAdminByEmailFromDB(email) {
     try {
-      const user = await usercon.findOne({ email: email });
+      const user = await admincon.findOne({ email: email });
       return user;
     } catch (e) {
       console.error(`Unable to get user by ID: ${e}`);
@@ -38,9 +38,9 @@ export default class UserDAO {
     }
   }
 
-  static async getUserByIDFromDB(id) {
+  static async getAdminByIDFromDB(id) {
     try {
-      const user = await usercon.findOne({ _id: id });
+      const user = await admincon.findOne({ _id: id });
       return user;
     } catch (e) {
       console.error(`Unable to get user by ID: ${e}`);
@@ -48,9 +48,9 @@ export default class UserDAO {
     }
   }
 
-  static async updateUserPasswordInDB(email, newPassword) {
+  static async updateAdminPasswordInDB(email, newPassword) {
     try {
-      const updateResult = await usercon.updateOne(
+      const updateResult = await admincon.updateOne(
         { email },
         {
           $set: { password: newPassword },
@@ -63,9 +63,9 @@ export default class UserDAO {
     }
   }
 
-  static async updateUserAccountInDB(user) {
+  static async updateAdminAccountInDB(user) {
     try {
-      const updateResult = await usercon.updateOne(
+      const updateResult = await admincon.updateOne(
         { _id: user._id },
         {
           $set: user,

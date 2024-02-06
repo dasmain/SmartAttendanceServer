@@ -5,18 +5,16 @@ import checkTokenMiddleware from "../middleware/check_token_middleware.mjs";
 
 const router = express.Router();
 
-const userRoute = "/user";
+const userRoute = "/admin";
 //api routes
 router
   .route(userRoute + "/create")
   .post(
     checkRequiredFieldsMiddleware([
-      "firstname",
-      "lastname",
       "email",
       "password",
     ]),
-    UserController.apiCreateUserAccount
+    UserController.apiCreateAdminAccount
   );
 
 router
@@ -25,11 +23,8 @@ router
     checkRequiredFieldsMiddleware([
       "email",
       "password",
-      "device_name",
-      "device_id",
-      "ip_address",
     ]),
-    UserController.apiSignInUserAccount
+    UserController.apiSignInAdminAccount
   );
 
 router
@@ -46,10 +41,10 @@ router
 
 router
   .route(userRoute + "/sign-out")
-  .delete(checkTokenMiddleware, UserController.apiSignOutUserAccount);
+  .delete(checkTokenMiddleware, UserController.apiSignOutAdminAccount);
 
 router
   .route(userRoute + "/details")
-  .get(checkTokenMiddleware, UserController.apiGetUserAccountDetails);
+  .get(checkTokenMiddleware, UserController.apiGetAdminAccountDetails);
 
 export default router;

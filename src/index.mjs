@@ -23,9 +23,13 @@ import TokenService from "./services/token_service.mjs";
 
 const port = appConfig.server.port;
 //const httpPort = appConfig.server.httpsPort;
-const username = encodeURIComponent(databaseConfig.database.username);
-const password = encodeURIComponent(databaseConfig.database.password);
-const uri = `mongodb://${username}:${password}@${databaseConfig.database.host}:${databaseConfig.database.port}/${databaseConfig.database.dbName}`;
+// const username = encodeURIComponent(databaseConfig.database.username);
+// const password = encodeURIComponent(databaseConfig.database.password);
+
+const uri = `mongodb://${databaseConfig.database.host}:${databaseConfig.database.port}/${databaseConfig.database.dbName}`;
+
+//const uri = `mongodb://127.0.0.1:27017/sadb`
+//${username}:${password}@
 
 MongoClient.connect(uri, {
   maxPoolSize: 50,
