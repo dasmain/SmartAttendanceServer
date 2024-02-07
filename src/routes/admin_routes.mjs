@@ -1,5 +1,5 @@
 import express from "express";
-import UserController from "../controllers/user_controller.mjs";
+import AdminController from "../controllers/admin_controller.mjs";
 import checkRequiredFieldsMiddleware from "../middleware/check_required_fields_middleware.mjs";
 import checkTokenMiddleware from "../middleware/check_token_middleware.mjs";
 
@@ -14,7 +14,7 @@ router
       "email",
       "password",
     ]),
-    UserController.apiCreateAdminAccount
+    AdminController.apiCreateAdminAccount
   );
 
 router
@@ -24,7 +24,7 @@ router
       "email",
       "password",
     ]),
-    UserController.apiSignInAdminAccount
+    AdminController.apiSignInAdminAccount
   );
 
 router
@@ -32,19 +32,19 @@ router
   .post(
     checkRequiredFieldsMiddleware(["old_password", "new_password"]),
     checkTokenMiddleware,
-    UserController.apiUpdateAccountPassword
+    AdminController.apiUpdateAccountPassword
   );
 
 router
   .route(userRoute + "/update")
-  .post(checkTokenMiddleware, UserController.apiUpdateAccountDetails);
+  .post(checkTokenMiddleware, AdminController.apiUpdateAccountDetails);
 
 router
   .route(userRoute + "/sign-out")
-  .delete(checkTokenMiddleware, UserController.apiSignOutAdminAccount);
+  .delete(checkTokenMiddleware, AdminController.apiSignOutAdminAccount);
 
 router
   .route(userRoute + "/details")
-  .get(checkTokenMiddleware, UserController.apiGetAdminAccountDetails);
+  .get(checkTokenMiddleware, AdminController.apiGetAdminAccountDetails);
 
 export default router;

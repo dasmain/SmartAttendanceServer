@@ -1,12 +1,12 @@
-import UserService from "../services/admin_service.mjs";
+import AdminService from "../services/admin_service.mjs";
 import TokenUtil from "../utility/token_util.mjs";
 
-export default class UserController {
+export default class AdminController {
   static async apiCreateAdminAccount(req, res, next) {
     try {
       const { email, password } = req.body;
 
-      const serviceResponse = await UserService.addAdmin(
+      const serviceResponse = await AdminService.addAdmin(
         email,
         password
       );
@@ -30,7 +30,7 @@ export default class UserController {
     try {
       const { email, password } = req.body;
 
-      const serviceResponse = await UserService.signInAdmin(
+      const serviceResponse = await AdminService.signInAdmin(
         email,
         password
       );
@@ -54,7 +54,7 @@ export default class UserController {
   static async apiSignOutAdminAccount(req, res, next) {
     try {
       const token = req.headers["authorization"];
-      const serviceResponse = await UserService.signOutAdmin(token);
+      const serviceResponse = await AdminService.signOutAdmin(token);
 
       if (!serviceResponse) {
         res.status(200).json({
@@ -78,7 +78,7 @@ export default class UserController {
     try {
       const token = req.headers["authorization"];
       const tokenDetails = await TokenUtil.getDataFromToken(token);
-      const serviceResponse = await UserService.getAdminAccountDetails(
+      const serviceResponse = await AdminService.getAdminAccountDetails(
         tokenDetails.user_id
       );
       if (typeof serviceResponse === "string") {
@@ -102,7 +102,7 @@ export default class UserController {
       const { old_password, new_password } = req.body;
       const token = req.headers["authorization"];
       const tokenDetails = await TokenUtil.getDataFromToken(token);
-      const serviceResponse = await UserService.updateAdminAccountPassword(
+      const serviceResponse = await AdminService.updateAdminAccountPassword(
         tokenDetails.user_id,
         old_password,
         new_password
@@ -129,7 +129,7 @@ export default class UserController {
       const { firstname, lastname } = req.body;
       const token = req.headers["authorization"];
       const tokenDetails = await TokenUtil.getDataFromToken(token);
-      const serviceResponse = await UserService.updateAdminAccountDetails(
+      const serviceResponse = await AdminService.updateAdminAccountDetails(
         tokenDetails.user_id,
         firstname,
         lastname
