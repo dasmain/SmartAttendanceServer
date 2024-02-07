@@ -1,13 +1,15 @@
 import express from "express";
 import cors from "cors";
-import routes from "./routes/admin_routes.mjs";
+import adminroutes from "./routes/admin_routes.mjs";
+import parentroutes from "./routes/parent_routes.mjs";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/v1", routes);
+app.use("/api/v1", adminroutes);
+app.use("/api/v1", parentroutes);
 
 app.use("*", (req, res) => res.status(404).json({ Error: "Not Found" }));
 
