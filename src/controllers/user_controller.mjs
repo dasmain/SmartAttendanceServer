@@ -28,14 +28,11 @@ export default class UserController {
 
   static async apiSignInAdminAccount(req, res, next) {
     try {
-      const { email, password, device_name, device_id, ip_address } = req.body;
+      const { email, password } = req.body;
 
       const serviceResponse = await UserService.signInAdmin(
         email,
-        password,
-        device_name,
-        device_id,
-        ip_address
+        password
       );
 
       if (typeof serviceResponse === "string") {
