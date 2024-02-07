@@ -1,4 +1,4 @@
-import UserService from "../services/user_service.mjs";
+import UserService from "../services/admin_service.mjs";
 import TokenUtil from "../utility/token_util.mjs";
 
 export default class UserController {
