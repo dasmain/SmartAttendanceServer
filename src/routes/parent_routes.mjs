@@ -1,7 +1,7 @@
 import express from "express";
 import ParentController from "../controllers/parent_controller.mjs";
 import checkRequiredFieldsMiddleware from "../middleware/check_required_fields_middleware.mjs";
-import checkTokenMiddleware from "../middleware/check_token_middleware.mjs";
+import checkParentTokenMiddleware from "../middleware/check_parent_token_middleware.mjs";
 
 const router = express.Router();
 
@@ -31,20 +31,20 @@ router
   .route(parentRoute + "/update/password")
   .post(
     checkRequiredFieldsMiddleware(["old_password", "new_password"]),
-    checkTokenMiddleware,
+    checkParentTokenMiddleware,
     ParentController.apiUpdateParentAccountPassword
   );
 
 router
   .route(parentRoute + "/edit/details")
-  .post(checkTokenMiddleware, ParentController.apiUpdateParentAccountDetails);
+  .post(checkParentTokenMiddleware, ParentController.apiUpdateParentAccountDetails);
 
 router
   .route(parentRoute + "/sign-out")
-  .delete(checkTokenMiddleware, ParentController.apiSignOutParentAccount);
+  .delete(checkParentTokenMiddleware, ParentController.apiSignOutParentAccount);
 
 router
   .route(parentRoute + "/details")
-  .get(checkTokenMiddleware, ParentController.apiGetParentAccountDetails);
+  .get(checkParentTokenMiddleware, ParentController.apiGetParentAccountDetails);
 
 export default router;

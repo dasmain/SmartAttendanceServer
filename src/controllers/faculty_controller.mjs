@@ -1,19 +1,18 @@
-import ParentService from "../services/parent_service.mjs";
+import FacultyService from "../services/faculty_service.mjs";
 import TokenUtil from "../utility/token_util.mjs";
 
-export default class ParentController {
-  static async apiCreateParentAccount(req, res, next) {
+export default class FacultyController {
+  static async apiCreateFacultyAccount(req, res, next) {
     try {
-      const { username, email, password, contactno, 
-        //studentID 
-    } = req.body;
+      const { firstName, lastName, username, email, password, contactno } = req.body;
 
-      const serviceResponse = await ParentService.addParent(
+      const serviceResponse = await FacultyService.addFaculty(
+        firstName,
+        lastName,
         username,
         email,
         password,
-        contactno,
-       // studentID
+        contactno
       );
       
       if (typeof serviceResponse === "string") {
@@ -22,7 +21,7 @@ export default class ParentController {
         res.status(200).json({
           success: true,
           data: serviceResponse,
-          message: "Parent account created successfully",
+          message: "Faculty account created successfully",
         });
       }
     } catch (e) {
@@ -30,11 +29,11 @@ export default class ParentController {
     }
   }
 
-  static async apiSignInParentAccount(req, res, next) {
+  static async apiSignInFacultyAccount(req, res, next) {
     try {
       const { email, password } = req.body;
 
-      const serviceResponse = await ParentService.signInParent(
+      const serviceResponse = await FacultyService.signInFaculty(
         email,
         password
       );
@@ -45,7 +44,7 @@ export default class ParentController {
         res.status(200).json({
           success: true,
           data: serviceResponse,
-          message: "Parent signed in successfully",
+          message: "Faculty signed in successfully",
         });
       }
     } catch (e) {
@@ -53,22 +52,22 @@ export default class ParentController {
     }
   }
 
-  static async apiSignOutParentAccount(req, res, next) {
+  static async apiSignOutFacultyAccount(req, res, next) {
     try {
       const token = req.headers["authorization"];
-      const serviceResponse = await ParentService.signOutParent(token);
+      const serviceResponse = await FacultyService.signOutFaculty(token);
 
       if (!serviceResponse) {
         res.status(200).json({
           success: false,
           data: {},
-          message: "Failed to sign out Parent",
+          message: "Failed to sign out Faculty",
         });
       } else {
         res.status(200).json({
           success: true,
           data: {},
-          message: "Parent signed out successfully",
+          message: "Faculty signed out successfully",
         });
       }
     } catch (e) {
@@ -76,11 +75,11 @@ export default class ParentController {
     }
   }
 
-  static async apiGetParentAccountDetails(req, res, next) {
+  static async apiGetFacultyAccountDetails(req, res, next) {
     try {
       const token = req.headers["authorization"];
-      const tokenDetails = await TokenUtil.getParentDataFromToken(token);
-      const serviceResponse = await ParentService.getParentAccountDetails(
+      const tokenDetails = await TokenUtil.getFacultyDataFromToken(token);
+      const serviceResponse = await FacultyService.getFacultyAccountDetails(
         tokenDetails.user_id
       );
 
@@ -90,7 +89,7 @@ export default class ParentController {
         res.status(200).json({
           success: true,
           data: serviceResponse,
-          message: "Parent account details fetched successfully",
+          message: "Faculty account details fetched successfully",
         });
       }
     } catch (e) {
@@ -98,12 +97,12 @@ export default class ParentController {
     }
   }
 
-  static async apiUpdateParentAccountPassword(req, res, next) {
+  static async apiUpdateFacultyAccountPassword(req, res, next) {
     try {
       const { old_password, new_password } = req.body;
       const token = req.headers["authorization"];
-      const tokenDetails = await TokenUtil.getParentDataFromToken(token);
-      const serviceResponse = await ParentService.updateParentAccountPassword(
+      const tokenDetails = await TokenUtil.getFacultyDataFromToken(token);
+      const serviceResponse = await FacultyService.updateFacultyAccountPassword(
         tokenDetails.user_id,
         old_password,
         new_password
@@ -115,7 +114,7 @@ export default class ParentController {
         res.status(200).json({
           success: true,
           data: serviceResponse,
-          message: "Parent account password updated successfully",
+          message: "Faculty account password updated successfully",
         });
       }
     } catch (e) {
@@ -123,13 +122,15 @@ export default class ParentController {
     }
   }
 
-  static async apiUpdateParentAccountDetails(req, res, next) {
+  static async apiUpdateFacultyAccountDetails(req, res, next) {
     try {
-      const { username, email, contactno } = req.body;
+      const { firstName, lastName, username, email, contactno } = req.body;
       const token = req.headers["authorization"];
-      const tokenDetails = await TokenUtil.getParentDataFromToken(token);
-      const serviceResponse = await ParentService.updateParentAccountDetails(
+      const tokenDetails = await TokenUtil.getFacultyDataFromToken(token);
+      const serviceResponse = await FacultyService.updateFacultyAccountDetails(
         tokenDetails.user_id,
+        firstName,
+        lastName,
         username,
         email,
         contactno
@@ -141,7 +142,7 @@ export default class ParentController {
         res.status(200).json({
           success: true,
           data: serviceResponse,
-          message: "Parent account details updated successfully",
+          message: "Faculty account details updated successfully",
         });
       }
     } catch (e) {

@@ -40,7 +40,7 @@ export default class ParentService {
         password: hashedPassword,
         contactno: contactno,
        // studentID: studentID,
-       role: "parent",
+        role: "parent",
         created_on: createdOn,
         deleted_on: deletedOn,
       };
@@ -80,7 +80,6 @@ export default class ParentService {
         role: existingParent.role,
         signedInOn: signedInOn,
       };
-
       const tokenString = await ParentTokenService.createParentToken(tokenPayload);
       const filteredParent = PatternUtil.filterParametersFromObject(existingParent, [
         "_id",

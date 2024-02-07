@@ -1,7 +1,7 @@
 import UserService from "../services/admin_service.mjs";
 import TokenUtil from "../utility/token_util.mjs";
 
-const checkTokenMiddleware = async (req, res, next) => {
+const checkParentTokenMiddleware = async (req, res, next) => {
   let token = req.headers["authorization"];
   //console.log(req.headers);
   let errorMessage;
@@ -15,14 +15,14 @@ const checkTokenMiddleware = async (req, res, next) => {
     const decoded = TokenUtil.decodeTokenData(token);
 
     if (decoded) {
-      tokenObject = await TokenUtil.getDataFromToken(token);
+      tokenObject = await TokenUtil.getParentDataFromToken(token);
 
       if (!tokenObject) {
         errorMessage = "Malformed or unknown token in the header";
       } else {
         //const userObject = await UserService.getUserByID(tokenObject.user_id);
 
-        if (tokenObject.role !== "admin") {
+        if (tokenObject.role !== "parent") {
           errorMessage =
             "You do not have the permissions to perform this operation";
         }
@@ -42,4 +42,4 @@ const checkTokenMiddleware = async (req, res, next) => {
   next();
 };
 
-export default checkTokenMiddleware;
+export default checkParentTokenMiddleware;

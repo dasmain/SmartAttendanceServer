@@ -1,17 +1,17 @@
 import { ObjectId } from "mongodb";
-import ParentTokenDAO from "../data/parent_token_dao.mjs"; // Assuming ParentTokenDAO is implemented
+import FacultyTokenDAO from "../data/faculty_token_dao.mjs"; // Assuming FacultyTokenDAO is implemented
 import TokenUtil from "../utility/token_util.mjs";
 
-export default class ParentTokenService {
+export default class FacultyTokenService {
   static async connectDatabase(client) {
     try {
-      await ParentTokenDAO.injectDB(client);
+      await FacultyTokenDAO.injectDB(client);
     } catch (e) {
       console.error(`Unable to establish a collection handle: ${e}`);
     }
   }
 
-  static async createParentToken(payload) {
+  static async createFacultyToken(payload) {
     try {
       const tokenString = TokenUtil.createToken(payload);
       const signedInOn = payload.signedInOn;
@@ -24,7 +24,7 @@ export default class ParentTokenService {
         role: role,
         signed_in_on: signedInOn,
       };
-      const addedTokenId = await ParentTokenDAO.addParentTokenToDB(tokenDocument);
+      const addedTokenId = await FacultyTokenDAO.addFacultyTokenToDB(tokenDocument);
       return tokenString;
     } catch (e) {
       console.log(e.message);
@@ -32,9 +32,9 @@ export default class ParentTokenService {
     }
   }
 
-  static async getParentToken(tokenString) {
+  static async getFacultyToken(tokenString) {
     try {
-      const tokenObject = await ParentTokenDAO.getParentTokenFromDB(tokenString);
+      const tokenObject = await FacultyTokenDAO.getFacultyTokenFromDB(tokenString);
       return tokenObject;
     } catch (e) {
       console.log(e.message);
@@ -42,9 +42,9 @@ export default class ParentTokenService {
     }
   }
 
-  static async deleteParentToken(tokenString) {
+  static async deleteFacultyToken(tokenString) {
     try {
-      const tokenObject = await ParentTokenDAO.deleteParentTokenFromDB(tokenString);
+      const tokenObject = await FacultyTokenDAO.deleteFacultyTokenFromDB(tokenString);
       return tokenObject;
     } catch (e) {
       console.log(e.message);
