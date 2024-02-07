@@ -2,7 +2,7 @@ import app from "./server.mjs";
 import { MongoClient } from "mongodb";
 import appConfig from "./config/app_config.mjs";
 import databaseConfig from "./config/database_config.mjs";
-import UserService from "./services/user_service.mjs";
+import AdminService from "./services/admin_service.mjs";
 import TokenService from "./services/token_service.mjs";
 
 // Uncomment to enable https
@@ -40,7 +40,7 @@ MongoClient.connect(uri, {
     process.exit(1);
   })
   .then(async (client) => {
-    await UserService.connectDatabase(client);
+    await AdminService.connectDatabase(client);
     await TokenService.connectDatabase(client);
     // const httpsServer = https.createServer(cred, app);
     // httpsServer.listen(port, () => {

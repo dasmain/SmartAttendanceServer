@@ -4,7 +4,7 @@ import PatternUtil from "../utility/pattern_util.mjs";
 import TokenUtil from "../utility/token_util.mjs";
 import TokenService from "./token_service.mjs";
 
-export default class UserService {
+export default class AdminService {
   static async connectDatabase(client) {
     try {
       await AdminDAO.injectDB(client);
