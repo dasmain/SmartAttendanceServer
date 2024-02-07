@@ -6,6 +6,8 @@ import AdminService from "./services/admin_service.mjs";
 import TokenService from "./services/token_service.mjs";
 import ParentService from "./services/parent_service.mjs";
 import ParentTokenService from "./services/parent_token_service.mjs";
+import StudentService from "./services/student_service.mjs";
+import StudentTokenService from "./services/student_token_service.mjs";
 // Uncomment to enable https
 
 // import fs from "fs";
@@ -45,6 +47,8 @@ MongoClient.connect(uri, {
     await TokenService.connectDatabase(client);
     await ParentService.connectDatabase(client);
     await ParentTokenService.connectDatabase(client);
+    await StudentService.connectDatabase(client);
+    await StudentTokenService.connectDatabase(client);
     // const httpsServer = https.createServer(cred, app);
     // httpsServer.listen(port, () => {
     //   console.log(`https server listening`);

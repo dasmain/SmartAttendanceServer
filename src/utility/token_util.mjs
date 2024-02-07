@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import appConfig from "../config/app_config.mjs";
 import TokenService from "../services/token_service.mjs";
 import ParentService from "../services/parent_service.mjs";
+import StudentService from "../services/student_service.mjs";
 const secretKey = appConfig.jwt.secret;
 
 const TokenUtil = {
@@ -65,6 +66,15 @@ const TokenUtil = {
   },
   getParentDataFromToken: async (token) => {
     const tokenObject = await ParentService.getUserToken(
+      TokenUtil.cleanToken(token)
+    );
+    
+
+    return tokenObject;
+  },
+
+  getStudentDataFromToken: async (token) => {
+    const tokenObject = await StudentService.getUserToken(
       TokenUtil.cleanToken(token)
     );
     
