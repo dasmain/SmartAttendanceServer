@@ -16,10 +16,12 @@ export default class StudentTokenService {
       const tokenString = TokenUtil.createToken(payload);
       const signedInOn = payload.signedInOn;
       const userId = new ObjectId(payload._id);
+      const role = payload.role;
 
       const tokenDocument = {
         token: tokenString,
         user_id: userId,
+        role: role,
         signed_in_on: signedInOn,
       };
       const addedTokenId = await StudentTokenDAO.addStudentTokenToDB(tokenDocument);

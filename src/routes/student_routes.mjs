@@ -1,7 +1,7 @@
 import express from "express";
 import StudentController from "../controllers/student_controller.mjs";
 import checkRequiredFieldsMiddleware from "../middleware/check_required_fields_middleware.mjs";
-import checkTokenMiddleware from "../middleware/check_token_middleware.mjs";
+import checkStudentTokenMiddleware from "../middleware/check_student_token_middleware.mjs";
 
 const router = express.Router();
 
@@ -31,20 +31,20 @@ router
   .route(studentRoute + "/update/password")
   .post(
     checkRequiredFieldsMiddleware(["old_password", "new_password"]),
-    checkTokenMiddleware,
+    checkStudentTokenMiddleware,
     StudentController.apiUpdateStudentAccountPassword
   );
 
 router
   .route(studentRoute + "/edit/details")
-  .post(checkTokenMiddleware, StudentController.apiUpdateStudentAccountDetails);
+  .post(checkStudentTokenMiddleware, StudentController.apiUpdateStudentAccountDetails);
 
 router
   .route(studentRoute + "/sign-out")
-  .delete(checkTokenMiddleware, StudentController.apiSignOutStudentAccount);
+  .delete(checkStudentTokenMiddleware, StudentController.apiSignOutStudentAccount);
 
 router
   .route(studentRoute + "/details")
-  .get(checkTokenMiddleware, StudentController.apiGetStudentAccountDetails);
+  .get(checkStudentTokenMiddleware, StudentController.apiGetStudentAccountDetails);
 
 export default router;
