@@ -14,11 +14,12 @@ export default class StudentService {
   }
 
   static async addStudent(
+    firstname,
+    lastname,
     username,
     email,
     password,
     contactno
-    //studentID
   ) {
     try {
       const existingUser = await StudentDAO.getStudentByEmailFromDB(email);
@@ -34,16 +35,24 @@ export default class StudentService {
         return "Please enter a valid email";
       }
 
+      const nameCheck =
+        PatternUtil.checkAlphabeticName(firstname) &&
+        PatternUtil.checkAlphabeticName(lastname);
+      if (!nameCheck) {
+        return "Name can not contain numbers and special characters";
+      }
+
       const hashedPassword = await AuthUtil.hashPassword(password);
       const createdOn = new Date();
       const deletedOn = null;
 
       const userDocument = {
+        firstname: firstname,
+        lastname: lastname,
         username: username,
         email: email,
         password: hashedPassword,
         contactno: contactno,
-        // studentID: studentID,
         role: "student",
         created_on: createdOn,
         deleted_on: deletedOn,
@@ -189,6 +198,8 @@ export default class StudentService {
 
   static async updateStudentAccountDetails(
     studentId,
+    firstname,
+    lastname,
     username,
     email,
     contactno
@@ -197,6 +208,14 @@ export default class StudentService {
       const existingStudent = await StudentDAO.getStudentByIDFromDB(studentId);
       if (!existingStudent) {
         return "No user found for this ID";
+      }
+
+      if (firstname) {
+        existingStudent.firstname = firstname;
+      }
+
+      if (lastname) {
+        existingStudent.lastname = lastname;
       }
 
       if (username) {

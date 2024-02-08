@@ -4,11 +4,13 @@ import TokenUtil from "../utility/token_util.mjs";
 export default class StudentController {
   static async apiCreateStudentAccount(req, res, next) {
     try {
-      const { username, email, password, contactno, 
+      const { firstname, lastname, username, email, password, contactno, 
         //studentID 
     } = req.body;
 
       const serviceResponse = await StudentService.addStudent(
+        firstname,
+        lastname,
         username,
         email,
         password,
@@ -125,11 +127,13 @@ export default class StudentController {
 
   static async apiUpdateStudentAccountDetails(req, res, next) {
     try {
-      const { username, email, contactno } = req.body;
+      const { firstname, lastname, username, email, contactno } = req.body;
       const token = req.headers["authorization"];
       const tokenDetails = await TokenUtil.getDataFromToken(token);
       const serviceResponse = await StudentService.updateStudentAccountDetails(
         tokenDetails.user_id,
+        firstname,
+        lastname,
         username,
         email,
         contactno
