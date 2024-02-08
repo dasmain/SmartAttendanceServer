@@ -37,7 +37,7 @@ export default class FacultyService {
         FirstName: firstName,
         LastName: lastName,
         Username: username,
-        Email:email,
+        email:email,
         password: hashedPassword,
         ContactNo: contactno,
         role: "faculty",
