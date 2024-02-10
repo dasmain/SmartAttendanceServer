@@ -224,4 +224,17 @@ export default class FacultyService {
     }
   }
   
+  static async getAllFacultyForAdmin() {
+    try {
+      const existingFaculty = await FacultyDAO.getAllFaculty();
+      if (!existingFaculty) {
+        return "No faculty available.";
+      } else {
+        return existingFaculty;
+      }
+    } catch (e) {
+      return e.message;
+    }
+  }
+
 }

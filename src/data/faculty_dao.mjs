@@ -77,4 +77,15 @@ export default class FacultyDAO {
       return false;
     }
   }
+
+  static async getAllFaculty() {
+    try {
+      const faculty = await facultyCon.find().toArray();
+      return faculty;
+    } catch (e) {
+      console.error(`Unable to get all Faculty: ${e}`);
+      return null;
+    }
+  }
+
 }

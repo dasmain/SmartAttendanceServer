@@ -4,7 +4,8 @@ import TokenUtil from "../utility/token_util.mjs";
 export default class FacultyController {
   static async apiCreateFacultyAccount(req, res, next) {
     try {
-      const { firstName, lastName, username, email, password, contactno } = req.body;
+      const { firstName, lastName, username, email, password, contactno } =
+        req.body;
 
       const serviceResponse = await FacultyService.addFaculty(
         firstName,
@@ -14,9 +15,11 @@ export default class FacultyController {
         password,
         contactno
       );
-      
+
       if (typeof serviceResponse === "string") {
-        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
       } else {
         res.status(200).json({
           success: true,
@@ -39,7 +42,9 @@ export default class FacultyController {
       );
 
       if (typeof serviceResponse === "string") {
-        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
       } else {
         res.status(200).json({
           success: true,
@@ -84,7 +89,9 @@ export default class FacultyController {
       );
 
       if (typeof serviceResponse === "string") {
-        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
       } else {
         res.status(200).json({
           success: true,
@@ -109,7 +116,9 @@ export default class FacultyController {
       );
 
       if (typeof serviceResponse === "string") {
-        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
       } else {
         res.status(200).json({
           success: true,
@@ -137,12 +146,39 @@ export default class FacultyController {
       );
 
       if (typeof serviceResponse === "string") {
-        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
       } else {
         res.status(200).json({
           success: true,
           data: serviceResponse,
           message: "Faculty account details updated successfully",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({ success: false, data: {}, message: e.message });
+    }
+  }
+
+  static async apiGetAllFacultyAccountDetails(req, res, next) {
+    try {
+      const token = req.headers["authorization"];
+      const tokenDetails = await TokenUtil.getDataFromToken(token);
+      if (tokenDetails){
+        //if no admin then work here
+      }
+      const serviceResponse = await FacultyService.getAllFacultyForAdmin();
+
+      if (typeof serviceResponse === "string") {
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: serviceResponse,
+          message: "Faculty account details fetched successfully",
         });
       }
     } catch (e) {

@@ -2,6 +2,7 @@ import express from "express";
 import FacultyController from "../controllers/faculty_controller.mjs";
 import checkRequiredFieldsMiddleware from "../middleware/check_required_fields_middleware.mjs";
 import checkFacultyTokenMiddleware from "../middleware/check_faculty_token_middleware.mjs";
+import checkTokenMiddleware from "../middleware/check_token_middleware.mjs";
 
 const router = express.Router();
 
@@ -47,5 +48,9 @@ router
 router
   .route(facultyRoute + "/details")
   .get(checkFacultyTokenMiddleware, FacultyController.apiGetFacultyAccountDetails);
+
+  router
+  .route(facultyRoute + "/alldetails")
+  .get(checkTokenMiddleware, FacultyController.apiGetAllFacultyAccountDetails);
 
 export default router;
