@@ -158,7 +158,6 @@ export default class StudentController {
       const { email } = req.body;
 
       const serviceResponse = await StudentService.forgotPassword(email);
-
       if (typeof serviceResponse === "string") {
         res.status(200).json({ success: false, data: {}, message: serviceResponse });
       } else {

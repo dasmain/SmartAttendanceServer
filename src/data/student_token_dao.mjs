@@ -47,14 +47,10 @@ export default class StudentTokenDAO {
       return null;
     }
   }
-  static async savePasswordResetTokenToDB(email) {
+  static async savePasswordResetTokenToDB(token) {
     try {
-      const tokenDocument = {
-    
-        email: email,
-        created_at: new Date(),
-      };
-      const insertionResult = await studentTokenCon.insertOne(tokenDocument);
+     
+      const insertionResult = await studentTokenCon.insertOne(token);
       if (insertionResult && insertionResult.insertedId) {
         return insertionResult.insertedId;
       } else {

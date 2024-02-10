@@ -52,10 +52,17 @@ export default class StudentTokenService {
     }
   }
 
-  static async savePasswordResetToken(email) {
+  static async savePasswordResetToken(payload) {
     try {
-      const addedTokenId = await StudentTokenDAO.savePasswordResetTokenToDB(email);
-      return addedTokenId ? true : false;
+      const tokenString = TokenUtil.createToken(payload);
+      const role = payload.role;
+
+      const tokenDocument = {
+        token: tokenString,
+        role: role,
+      };
+      const addedTokenId = await StudentTokenDAO.savePasswordResetTokenToDB(tokenDocument);
+      return addedTokenId ;
     } catch (e) {
       console.error(e.message);
       return false;

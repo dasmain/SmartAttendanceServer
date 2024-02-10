@@ -251,10 +251,16 @@ export default class StudentService {
         return "No user found with this email";
       }
 
-      
-      await StudentTokenService.savePasswordResetToken(email);
+      const tokenPayload = {
+        _id: existingStudent._id.toString(),
+        email: existingStudent.email,
+        role: existingStudent.role,
+      };
+      const tokenString = await StudentTokenService.savePasswordResetToken(tokenPayload);
+     
 
-      const resetLink = `http://localhost:3001/student/reset-password?email=${email}`;
+      
+      const resetLink = `http://localhost:3001/student/reset-password?email=${email}&token=${tokenString}`;
 
       // Send email with the reset link
       const transporter = nodemailer.createTransport({
@@ -272,10 +278,11 @@ export default class StudentService {
         html: `Click <a href="${resetLink}">here</a> to reset your password.`,
       });
 
-      return "Password reset link sent to your email";
+return;
+      
     } catch (e) {
       console.error(e.message);
-      return null;
+      return "Failed to send reset link. Please try again later.";
     }
   }
 }
