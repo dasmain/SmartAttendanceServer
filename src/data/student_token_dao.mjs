@@ -47,4 +47,22 @@ export default class StudentTokenDAO {
       return null;
     }
   }
+  static async savePasswordResetTokenToDB(email) {
+    try {
+      const tokenDocument = {
+    
+        email: email,
+        created_at: new Date(),
+      };
+      const insertionResult = await studentTokenCon.insertOne(tokenDocument);
+      if (insertionResult && insertionResult.insertedId) {
+        return insertionResult.insertedId;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      console.error(`Unable to save password reset token: ${e}`);
+      return null;
+    }
+  }
 }

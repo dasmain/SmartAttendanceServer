@@ -152,4 +152,24 @@ export default class StudentController {
       res.status(500).json({ success: false, data: {}, message: e.message });
     }
   }
+
+  static async apiForgotPassword(req, res, next) {
+    try {
+      const { email } = req.body;
+
+      const serviceResponse = await StudentService.forgotPassword(email);
+
+      if (typeof serviceResponse === "string") {
+        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: {},
+          message: "Password reset link sent to your email",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({ success: false, data: {}, message: e.message });
+    }
+  }
 }

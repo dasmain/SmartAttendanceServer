@@ -26,7 +26,14 @@ router
     checkRequiredFieldsMiddleware(["email", "password"]),
     StudentController.apiSignInStudentAccount
   );
-
+  
+  router
+  .route(studentRoute + "/forgot-password")
+  .post(
+    checkRequiredFieldsMiddleware(["email"]),
+    StudentController.apiForgotPassword
+  );
+  
 router
   .route(studentRoute + "/update/password")
   .post(
@@ -34,8 +41,7 @@ router
     checkStudentTokenMiddleware,
     StudentController.apiUpdateStudentAccountPassword
   );
-
-router
+  router
   .route(studentRoute + "/edit/details")
   .post(checkStudentTokenMiddleware, StudentController.apiUpdateStudentAccountDetails);
 
