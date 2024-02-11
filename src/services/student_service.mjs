@@ -3,7 +3,7 @@ import AuthUtil from "../utility/auth_util.mjs";
 import PatternUtil from "../utility/pattern_util.mjs";
 import TokenUtil from "../utility/token_util.mjs";
 import StudentTokenService from "./student_token_service.mjs";
-
+import nodemailer from 'nodemailer';
 export default class StudentService {
   static async connectDatabase(client) {
     try {
@@ -243,4 +243,63 @@ export default class StudentService {
       return e.message;
     }
   }
+
+  static async forgotPassword(email) {
+    try {
+      const existingStudent = await StudentDAO.getStudentByEmailFromDB(email);
+      if (!existingStudent) {
+        return "No user found with this email";
+      }
+
+      const tokenPayload = {
+        _id: existingStudent._id.toString(),
+        email: existingStudent.email,
+        role: existingStudent.role,
+      };
+      const tokenString = await StudentTokenService.savePasswordResetToken(tokenPayload);
+
+      
+      const resetLink = `http://localhost:3001/student/reset-password?email=${email}&token=${tokenString}`;
+
+      // Send email with the reset link
+      const transporter = nodemailer.createTransport({
+        service: 'hotmail',
+        auth: {
+          user: 'basiljamil1@hotmail.com',
+          pass: 'Redwhite123'
+        }
+      });
+
+      await transporter.sendMail({
+        from: 'basiljamil1@hotmail.com',
+        to: email,
+        subject: 'Password Reset Link',
+        html: `Click <a href="${resetLink}">here</a> to reset your password.`,
+      });
+
+return;
+      
+    } catch (e) {
+      console.error(e.message);
+      return "Failed to send reset link. Please try again later.";
+    }
+  }
+
+  // static async validateResetPasswordToken(token) {
+  //   try {
+  //     // Retrieve token object from the database
+  //     const tokenObject = await StudentTokenService.getStudentToken(token);
+  
+  //     // Check if the token object exists and is valid
+  //     if (tokenObject) {
+  //       // Additional validation checks can be performed here if needed
+  //       return true; // Token is valid
+  //     } else {
+  //       return false; // Token is invalid or expired
+  //     }
+  //   } catch (error) {
+  //     console.error("Error validating reset password token:", error);
+  //     return false;
+  //   }
+  // }
 }
