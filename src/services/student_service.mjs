@@ -302,4 +302,27 @@ return;
   //     return false;
   //   }
   // }
+
+  static async getAllStudentForAdmin() {
+    try {
+      const existingStudent = await StudentDAO.getAllStudent();
+      if (!existingStudent) {
+        return "No student available.";
+      } else {
+        return existingStudent;
+      }
+    } catch (e) {
+      return e.message;
+    }
+  }
+
+  static async deleteStudent(_id) {
+    try {
+      const resultObject = await StudentDAO.deleteStudentFromDB(_id);
+      return resultObject;
+    } catch (e) {
+      console.log(e.message);
+      return null;
+    }
+  }
 }

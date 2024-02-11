@@ -237,4 +237,14 @@ export default class FacultyService {
     }
   }
 
+  static async deleteFaculty(_id) {
+    try {
+      const resultObject = await FacultyDAO.deleteFacultyFromDB(_id);
+      return resultObject;
+    } catch (e) {
+      console.log(e.message);
+      return null;
+    }
+  }
+
 }

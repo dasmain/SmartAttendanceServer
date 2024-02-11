@@ -1,4 +1,5 @@
 import databaseConfig from "../config/database_config.mjs";
+import { ObjectId } from 'mongodb';
 
 let studentCon;
 
@@ -78,5 +79,24 @@ export default class StudentDAO {
     }
   }
 
+  static async getAllStudent() {
+    try {
+      const student = await studentCon.find().toArray();
+      return student;
+    } catch (e) {
+      console.error(`Unable to get all Student: ${e}`);
+      return null;
+    }
+  }
+
+  static async deleteStudentFromDB(_id) {
+    try {
+      const isDel = await studentCon.deleteOne({ _id: new ObjectId(_id) });
+      return true;
+    } catch (e) {
+      console.error(`Unable to delete student: ${e}`);
+      return null;
+    }
+  }
   
 }

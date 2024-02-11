@@ -163,11 +163,6 @@ export default class FacultyController {
 
   static async apiGetAllFacultyAccountDetails(req, res, next) {
     try {
-      const token = req.headers["authorization"];
-      const tokenDetails = await TokenUtil.getDataFromToken(token);
-      if (tokenDetails){
-        //if no admin then work here
-      }
       const serviceResponse = await FacultyService.getAllFacultyForAdmin();
 
       if (typeof serviceResponse === "string") {
@@ -179,6 +174,37 @@ export default class FacultyController {
           success: true,
           data: serviceResponse,
           message: "Faculty account details fetched successfully",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({ success: false, data: {}, message: e.message });
+    }
+  }
+
+  static async apiDeleteFacultyAccount(req, res, next) {
+    try {
+      const _id = req.query._id;
+      if (!_id) {
+        return res.status(400).json({
+          success: false,
+          data: {},
+          message: "_id parameter is missing",
+        });
+      }
+
+      const serviceResponse = await FacultyService.deleteFaculty(_id);
+
+      if (!serviceResponse) {
+        res.status(200).json({
+          success: false,
+          data: {},
+          message: "Failed to delete Faculty",
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: {},
+          message: "Faculty deleted successfully",
         });
       }
     } catch (e) {

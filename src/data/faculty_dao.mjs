@@ -1,4 +1,5 @@
 import databaseConfig from "../config/database_config.mjs";
+import { ObjectId } from 'mongodb';
 
 let facultyCon;
 
@@ -84,6 +85,16 @@ export default class FacultyDAO {
       return faculty;
     } catch (e) {
       console.error(`Unable to get all Faculty: ${e}`);
+      return null;
+    }
+  }
+
+  static async deleteFacultyFromDB(_id) {
+    try {
+      const isDel = await facultyCon.deleteOne({ _id: new ObjectId(_id) });
+      return true;
+    } catch (e) {
+      console.error(`Unable to delete faculty: ${e}`);
       return null;
     }
   }

@@ -205,4 +205,27 @@ export default class ParentService {
       return e.message;
     }
   }
+
+  static async getAllParentForAdmin() {
+    try {
+      const existingParent = await ParentDAO.getAllParent();
+      if (!existingParent) {
+        return "No parent available.";
+      } else {
+        return existingParent;
+      }
+    } catch (e) {
+      return e.message;
+    }
+  }
+
+  static async deleteParent(_id) {
+    try {
+      const resultObject = await ParentDAO.deleteParentFromDB(_id);
+      return resultObject;
+    } catch (e) {
+      console.log(e.message);
+      return null;
+    }
+  }
 }

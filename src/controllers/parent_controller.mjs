@@ -148,4 +148,55 @@ export default class ParentController {
       res.status(500).json({ success: false, data: {}, message: e.message });
     }
   }
+
+  static async apiGetAllParentAccountDetails(req, res, next) {
+    try {
+      const serviceResponse = await ParentService.getAllParentForAdmin();
+
+      if (typeof serviceResponse === "string") {
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: serviceResponse,
+          message: "Student account details fetched successfully",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({ success: false, data: {}, message: e.message });
+    }
+  }
+  
+  static async apiDeleteParentAccount(req, res, next) {
+    try {
+      const _id = req.query._id;
+      if (!_id) {
+        return res.status(400).json({
+          success: false,
+          data: {},
+          message: "_id parameter is missing",
+        });
+      }
+
+      const serviceResponse = await ParentService.deleteParent(_id);
+
+      if (!serviceResponse) {
+        res.status(200).json({
+          success: false,
+          data: {},
+          message: "Failed to delete Parent",
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: {},
+          message: "Parent deleted successfully",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({ success: false, data: {}, message: e.message });
+    }
+  }
 }

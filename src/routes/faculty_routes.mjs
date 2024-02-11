@@ -19,6 +19,7 @@ router
       "password",
       "contactno",
     ]),
+    checkTokenMiddleware,
     FacultyController.apiCreateFacultyAccount
   );
 
@@ -39,18 +40,31 @@ router
 
 router
   .route(facultyRoute + "/edit/details")
-  .post(checkFacultyTokenMiddleware, FacultyController.apiUpdateFacultyAccountDetails);
+  .post(
+    checkTokenMiddleware,
+    FacultyController.apiUpdateFacultyAccountDetails
+  );
 
 router
   .route(facultyRoute + "/sign-out")
-  .delete(checkFacultyTokenMiddleware, FacultyController.apiSignOutFacultyAccount);
+  .delete(
+    checkFacultyTokenMiddleware,
+    FacultyController.apiSignOutFacultyAccount
+  );
 
 router
   .route(facultyRoute + "/details")
-  .get(checkFacultyTokenMiddleware, FacultyController.apiGetFacultyAccountDetails);
+  .get(
+    checkFacultyTokenMiddleware,
+    FacultyController.apiGetFacultyAccountDetails
+  );
 
-  router
+router
   .route(facultyRoute + "/alldetails")
   .get(checkTokenMiddleware, FacultyController.apiGetAllFacultyAccountDetails);
+
+  router
+  .route(facultyRoute + "/delete")
+  .delete(checkTokenMiddleware, FacultyController.apiDeleteFacultyAccount);
 
 export default router;

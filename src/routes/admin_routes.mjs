@@ -10,20 +10,15 @@ const userRoute = "/admin";
 router
   .route(userRoute + "/create")
   .post(
-    checkRequiredFieldsMiddleware([
-      "email",
-      "password",
-    ]),
+    checkRequiredFieldsMiddleware(["email", "password"]),
+    checkTokenMiddleware,
     AdminController.apiCreateAdminAccount
   );
 
 router
   .route(userRoute + "/sign-in")
   .post(
-    checkRequiredFieldsMiddleware([
-      "email",
-      "password",
-    ]),
+    checkRequiredFieldsMiddleware(["email", "password"]),
     AdminController.apiSignInAdminAccount
   );
 

@@ -1,4 +1,5 @@
 import databaseConfig from "../config/database_config.mjs";
+import { ObjectId } from 'mongodb';
 
 let parentCon;
 
@@ -75,6 +76,26 @@ export default class ParentDAO {
     } catch (e) {
       console.error(`Unable to update parent account: ${e}`);
       return false;
+    }
+  }
+
+  static async getAllParent() {
+    try {
+      const parent = await parentCon.find().toArray();
+      return parent;
+    } catch (e) {
+      console.error(`Unable to get all Student: ${e}`);
+      return null;
+    }
+  }
+
+  static async deleteParentFromDB(_id) {
+    try {
+      const isDel = await parentCon.deleteOne({ _id: new ObjectId(_id) });
+      return true;
+    } catch (e) {
+      console.error(`Unable to delete parent: ${e}`);
+      return null;
     }
   }
 }
