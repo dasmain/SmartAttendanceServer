@@ -62,7 +62,7 @@ export default class StudentTokenService {
         role: role,
       };
       const addedTokenId = await StudentTokenDAO.savePasswordResetTokenToDB(tokenDocument);
-      return addedTokenId ;
+      return tokenString ;
     } catch (e) {
       console.error(e.message);
       return false;

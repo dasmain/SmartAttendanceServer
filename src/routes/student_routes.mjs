@@ -33,6 +33,13 @@ router
     checkRequiredFieldsMiddleware(["email"]),
     StudentController.apiForgotPassword
   );
+  router
+  .route(studentRoute + "/validate-reset-pass-token")
+  .get(
+    checkStudentTokenMiddleware,
+    StudentController.apiGetStudentTokenValidation
+  );
+  
   
 router
   .route(studentRoute + "/update/password")

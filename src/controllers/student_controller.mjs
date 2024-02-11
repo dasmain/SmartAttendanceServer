@@ -171,4 +171,21 @@ export default class StudentController {
       res.status(500).json({ success: false, data: {}, message: e.message });
     }
   }
+
+  static async apiGetStudentTokenValidation(req, res, next) {
+    try {
+      const token = req.headers["authorization"];
+  
+      // Validate the token
+      // const isValidToken = await StudentService.validateResetPasswordToken(token);
+      const tokenDetails = await TokenUtil.getStudentDataFromToken(token);
+      if (tokenDetails) {
+        res.status(200).json({ success: true, data: {}, message: "Token is valid" });
+      } else {
+        res.status(400).json({ success: false, data: {}, message: "Invalid or expired token" });
+      }
+    } catch (e) {
+      res.status(500).json({ success: false, data: {}, message: e.message });
+    }
+  }
 }

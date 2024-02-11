@@ -257,7 +257,6 @@ export default class StudentService {
         role: existingStudent.role,
       };
       const tokenString = await StudentTokenService.savePasswordResetToken(tokenPayload);
-     
 
       
       const resetLink = `http://localhost:3001/student/reset-password?email=${email}&token=${tokenString}`;
@@ -285,4 +284,22 @@ return;
       return "Failed to send reset link. Please try again later.";
     }
   }
+
+  // static async validateResetPasswordToken(token) {
+  //   try {
+  //     // Retrieve token object from the database
+  //     const tokenObject = await StudentTokenService.getStudentToken(token);
+  
+  //     // Check if the token object exists and is valid
+  //     if (tokenObject) {
+  //       // Additional validation checks can be performed here if needed
+  //       return true; // Token is valid
+  //     } else {
+  //       return false; // Token is invalid or expired
+  //     }
+  //   } catch (error) {
+  //     console.error("Error validating reset password token:", error);
+  //     return false;
+  //   }
+  // }
 }
