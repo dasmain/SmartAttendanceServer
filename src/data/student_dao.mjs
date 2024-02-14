@@ -41,7 +41,7 @@ export default class StudentDAO {
 
   static async getStudentByIDFromDB(id) {
     try {
-      const student = await studentCon.findOne({ _id: id });
+      const student = await studentCon.findOne({ _id: new ObjectId(id) });
       return student;
     } catch (e) {
       console.error(`Unable to get student by ID: ${e}`);

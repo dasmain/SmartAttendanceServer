@@ -73,4 +73,11 @@ router
   .route(studentRoute + "/delete")
   .delete(checkTokenMiddleware, StudentController.apiDeleteStudentAccount);
 
+  router
+  .route(studentRoute + "/detailsbyid")
+  .get(
+    checkTokenMiddleware,
+    StudentController.apiGetStudentAccountDetailsByID
+  );
+
 export default router;
