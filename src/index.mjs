@@ -10,14 +10,12 @@ import StudentService from "./services/student_service.mjs";
 import StudentTokenService from "./services/student_token_service.mjs";
 import FacultyService from "./services/faculty_service.mjs";
 import FacultyTokenService from "./services/faculty_token_service.mjs";
-
-
+import CourseService from "./services/course_service.mjs";
 
 // Uncomment to enable https
 
 // import fs from "fs";
 // import https from "https";
-
 
 // const key = fs.readFileSync("private.key");
 // const cert = fs.readFileSync("certificate.crt");
@@ -56,6 +54,7 @@ MongoClient.connect(uri, {
     await StudentTokenService.connectDatabase(client);
     await FacultyService.connectDatabase(client);
     await FacultyTokenService.connectDatabase(client);
+    await CourseService.connectDatabase(client);
     // const httpsServer = https.createServer(cred, app);
     // httpsServer.listen(port, () => {
     //   console.log(`https server listening`);

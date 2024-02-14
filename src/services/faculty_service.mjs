@@ -14,7 +14,7 @@ export default class FacultyService {
     }
   }
 
-  static async addFaculty(firstName, lastName, username, email, password, contactno) {
+  static async addFaculty(firstName, lastName, username, email, password, contactno, isStudentAdvisor) {
     try {
       const existingFaculty = await FacultyDAO.getFacultyByEmailFromDB(email);
       if (existingFaculty) {
@@ -34,12 +34,13 @@ export default class FacultyService {
       const deletedOn = null;
 
       const facultyDocument = {
-        FirstName: firstName,
-        LastName: lastName,
-        Username: username,
+        firstName: firstName,
+        lastName: lastName,
+        username: username,
         email:email,
         password: hashedPassword,
-        ContactNo: contactno,
+        contactno: contactno,
+        isStudentAdvisor: isStudentAdvisor,
         role: "faculty",
         created_on: createdOn,
         deleted_on: deletedOn,
@@ -129,7 +130,7 @@ export default class FacultyService {
       } else {
         const filteredFaculty = PatternUtil.filterParametersFromObject(
           existingFaculty,
-          ["_id", "password","role"]
+          ["password","role"]
         );
 
         return { user: filteredFaculty };
@@ -175,7 +176,7 @@ export default class FacultyService {
     }
   }
 
-  static async updateFacultyAccountDetails(facultyId, firstName, lastName, username,email, contactno) {
+  static async updateFacultyAccountDetails(facultyId, firstName, lastName, username,email, contactno, isStudentAdvisor) {
     try {
       const existingFaculty = await FacultyDAO.getFacultyByIDFromDB(facultyId);
       if (!existingFaculty) {
@@ -210,6 +211,10 @@ export default class FacultyService {
   
       if (contactno) {
         existingFaculty.contactno = contactno;
+      }
+
+      if (isStudentAdvisor) {
+        existingFaculty.isStudentAdvisor = isStudentAdvisor;
       }
   
       const updateResult = await FacultyDAO.updateFacultyAccountInDB(existingFaculty);

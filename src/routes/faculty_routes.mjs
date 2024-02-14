@@ -40,10 +40,7 @@ router
 
 router
   .route(facultyRoute + "/edit/details")
-  .post(
-    checkTokenMiddleware,
-    FacultyController.apiUpdateFacultyAccountDetails
-  );
+  .post(checkTokenMiddleware, FacultyController.apiUpdateFacultyAccountDetails);
 
 router
   .route(facultyRoute + "/sign-out")
@@ -63,8 +60,12 @@ router
   .route(facultyRoute + "/alldetails")
   .get(checkTokenMiddleware, FacultyController.apiGetAllFacultyAccountDetails);
 
-  router
+router
   .route(facultyRoute + "/delete")
   .delete(checkTokenMiddleware, FacultyController.apiDeleteFacultyAccount);
+
+router
+  .route(facultyRoute + "/detailsbyid")
+  .get(checkTokenMiddleware, FacultyController.apiGetFacultyAccountDetailsByID);
 
 export default router;

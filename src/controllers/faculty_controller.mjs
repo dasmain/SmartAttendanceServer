@@ -4,7 +4,7 @@ import TokenUtil from "../utility/token_util.mjs";
 export default class FacultyController {
   static async apiCreateFacultyAccount(req, res, next) {
     try {
-      const { firstName, lastName, username, email, password, contactno } =
+      const { firstName, lastName, username, email, password, contactno, isStudentAdvisor } =
         req.body;
 
       const serviceResponse = await FacultyService.addFaculty(
@@ -13,7 +13,8 @@ export default class FacultyController {
         username,
         email,
         password,
-        contactno
+        contactno,
+        isStudentAdvisor
       );
 
       if (typeof serviceResponse === "string") {
@@ -104,6 +105,34 @@ export default class FacultyController {
     }
   }
 
+  static async apiGetFacultyAccountDetailsByID(req, res, next) {
+    try {
+      const _id = req.query._id;
+      if (!_id) {
+        return res.status(400).json({
+          success: false,
+          data: {},
+          message: "_id parameter is missing",
+        });
+      }
+      const serviceResponse = await FacultyService.getFacultyAccountDetails(_id);
+
+      if (typeof serviceResponse === "string") {
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: serviceResponse,
+          message: "Faculty account details fetched successfully",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({ success: false, data: {}, message: e.message });
+    }
+  }
+
   static async apiUpdateFacultyAccountPassword(req, res, next) {
     try {
       const { old_password, new_password } = req.body;
@@ -133,16 +162,25 @@ export default class FacultyController {
 
   static async apiUpdateFacultyAccountDetails(req, res, next) {
     try {
-      const { firstName, lastName, username, email, contactno } = req.body;
-      const token = req.headers["authorization"];
-      const tokenDetails = await TokenUtil.getFacultyDataFromToken(token);
+      const { firstName, lastName, username, email, contactno, isStudentAdvisor } = req.body;
+
+      const _id = req.query._id;
+      if (!_id) {
+        return res.status(400).json({
+          success: false,
+          data: {},
+          message: "_id parameter is missing",
+        });
+      }
+
       const serviceResponse = await FacultyService.updateFacultyAccountDetails(
-        tokenDetails.user_id,
+        _id,
         firstName,
         lastName,
         username,
         email,
-        contactno
+        contactno,
+        isStudentAdvisor
       );
 
       if (typeof serviceResponse === "string") {

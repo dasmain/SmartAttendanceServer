@@ -41,7 +41,7 @@ export default class FacultyDAO {
 
   static async getFacultyByIDFromDB(id) {
     try {
-      const faculty = await facultyCon.findOne({ _id: id });
+      const faculty = await facultyCon.findOne({ _id: new ObjectId(id) });
       return faculty;
     } catch (e) {
       console.error(`Unable to get faculty by ID: ${e}`);
