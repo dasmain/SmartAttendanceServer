@@ -56,7 +56,7 @@ export default class CourseRequestController {
             serviceResponse.studentId
           );
 
-        serviceResponse.studentId = forStudentResponse.user;
+        serviceResponse.studentId = forStudentResponse;
       }
 
       if (serviceResponse.courseId != null) {

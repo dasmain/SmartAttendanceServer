@@ -49,7 +49,7 @@ export default class CourseController {
             serviceResponse.courseTeacher
           );
 
-        serviceResponse.courseTeacher = forFacultyResponse.user;
+        serviceResponse.courseTeacher = forFacultyResponse;
       }
 
       if (typeof serviceResponse === "string") {
@@ -119,7 +119,7 @@ export default class CourseController {
         if (course.courseTeacher != null) {
           const forFacultyResponse =
             await FacultyService.getFacultyAccountDetails(course.courseTeacher);
-          course.courseTeacher = forFacultyResponse.user;
+          course.courseTeacher = forFacultyResponse;
         }
       }
 

@@ -116,13 +116,13 @@ export default class ParentController {
         _id
       );
 
-      if (serviceResponse.user.studentID != null) {
+      if (serviceResponse.studentID != null) {
         const forStudentResponse =
           await StudentService.getStudentAccountDetails(
-            serviceResponse.user.studentID
+            serviceResponse.studentID
           );
 
-        serviceResponse.user.studentID = forStudentResponse.user;
+        serviceResponse.studentID = forStudentResponse;
       }
 
       if (typeof serviceResponse === "string") {
