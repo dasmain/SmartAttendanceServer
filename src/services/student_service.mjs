@@ -250,13 +250,13 @@ export default class StudentService {
       const transporter = nodemailer.createTransport({
         service: 'hotmail',
         auth: {
-          user: 'basiljamil1@hotmail.com',
-          pass: 'Redwhite123'
+          user: 'smartattendance1@hotmail.com',
+          pass: 'Fypproject'
         }
       });
 
       await transporter.sendMail({
-        from: 'basiljamil1@hotmail.com',
+        from: 'smartattendance1@hotmail.com',
         to: email,
         subject: 'Password Reset Link',
         html: `Click <a href="${resetLink}">here</a> to reset your password.`,
