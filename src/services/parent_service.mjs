@@ -133,7 +133,7 @@ export default class ParentService {
         email: existingStudent.email,
         role: existingStudent.role,
       };
-      const tokenString = await StudentTokenService.savePasswordResetToken(tokenPayload);
+      const tokenString = await ParentTokenService.savePasswordResetToken(tokenPayload);
 
       
       const resetLink = `http://localhost:3001/student/reset-password?email=${email}&token=${tokenString}`;
