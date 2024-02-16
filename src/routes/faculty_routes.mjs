@@ -27,6 +27,18 @@ router
     checkRequiredFieldsMiddleware(["email", "password"]),
     FacultyController.apiSignInFacultyAccount
   );
+  router
+  .route(facultyRoute + "/forgot-password")
+  .post(
+    checkRequiredFieldsMiddleware(["email"]),
+    FacultyController.apiFacultyForgotPassword
+  );
+router
+  .route(facultyRoute + "/validate-reset-pass-token")
+  .get(
+    checkFacultyTokenMiddleware,
+    FacultyController.apiGetFacultyTokenValidation
+  );
 
 router
   .route(facultyRoute + "/update/password")

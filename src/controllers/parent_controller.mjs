@@ -75,7 +75,40 @@ export default class ParentController {
       res.status(500).json({ success: false, data: {}, message: e.message });
     }
   }
+  static async apiParentForgotPassword(req, res, next) {
+    try {
+      const { email } = req.body;
 
+      const serviceResponse = await ParentService.forgotParentPassword(email);
+      if (typeof serviceResponse === "string") {
+        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: {},
+          message: "Password reset link sent to your email",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({ success: false, data: {}, message: e.message });
+    }
+  }
+  static async apiGetParentTokenValidation(req, res, next) {
+    try {
+      const token = req.headers["authorization"];
+  
+      // Validate the token
+      // const isValidToken = await StudentService.validateResetPasswordToken(token);
+      const tokenDetails = await TokenUtil.getParentDataFromToken(token);
+      if (tokenDetails) {
+        res.status(200).json({ success: true, data: {}, message: "Token is valid" });
+      } else {
+        res.status(400).json({ success: false, data: {}, message: "Invalid or expired token" });
+      }
+    } catch (e) {
+      res.status(500).json({ success: false, data: {}, message: e.message });
+    }
+  }
   static async apiGetParentAccountDetails(req, res, next) {
     try {
       const token = req.headers["authorization"];

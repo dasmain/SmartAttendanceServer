@@ -131,6 +131,40 @@ export default class FacultyController {
     }
   }
 
+  static async apiFacultyForgotPassword(req, res, next) {
+    try {
+      const { email } = req.body;
+
+      const serviceResponse = await FacultyService.forgotFacultyPassword(email);
+      if (typeof serviceResponse === "string") {
+        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: {},
+          message: "Password reset link sent to your email",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({ success: false, data: {}, message: e.message });
+    }
+  }
+  static async apiGetFacultyTokenValidation(req, res, next) {
+    try {
+      const token = req.headers["authorization"];
+  
+      // Validate the token
+      // const isValidToken = await StudentService.validateResetPasswordToken(token);
+      const tokenDetails = await TokenUtil.getFacultyDataFromToken(token);
+      if (tokenDetails) {
+        res.status(200).json({ success: true, data: {}, message: "Token is valid" });
+      } else {
+        res.status(400).json({ success: false, data: {}, message: "Invalid or expired token" });
+      }
+    } catch (e) {
+      res.status(500).json({ success: false, data: {}, message: e.message });
+    }
+  }
   static async apiUpdateFacultyAccountPassword(req, res, next) {
     try {
       const { old_password, new_password } = req.body;

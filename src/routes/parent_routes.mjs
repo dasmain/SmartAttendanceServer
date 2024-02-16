@@ -21,6 +21,19 @@ router.route(parentRoute + "/create").post(
 );
 
 router
+  .route(parentRoute + "/forgot-password")
+  .post(
+    checkRequiredFieldsMiddleware(["email"]),
+    ParentController.apiParentForgotPassword
+  );
+router
+  .route(parentRoute + "/validate-reset-pass-token")
+  .get(
+    checkParentTokenMiddleware,
+    ParentController.apiGetParentTokenValidation
+  );
+
+router
   .route(parentRoute + "/sign-in")
   .post(
     checkRequiredFieldsMiddleware(["email", "password"]),

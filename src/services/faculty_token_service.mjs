@@ -31,7 +31,22 @@ export default class FacultyTokenService {
       return null;
     }
   }
+  static async savePasswordResetToken(payload) {
+    try {
+      const tokenString = TokenUtil.createToken(payload);
+      const role = payload.role;
 
+      const tokenDocument = {
+        token: tokenString,
+        role: role,
+      };
+      const addedTokenId = await FacultyTokenDAO.savePasswordResetTokenToDB(tokenDocument);
+      return tokenString ;
+    } catch (e) {
+      console.error(e.message);
+      return false;
+    }
+  }
   static async getFacultyToken(tokenString) {
     try {
       const tokenObject = await FacultyTokenDAO.getFacultyTokenFromDB(tokenString);

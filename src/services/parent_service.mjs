@@ -121,6 +121,46 @@ export default class ParentService {
       return e.message;
     }
   }
+  static async forgotParentPassword(email) {
+    try {
+      const existingStudent = await ParentDAO.getParentByEmailFromDB(email);
+      if (!existingStudent) {
+        return "No user found with this email";
+      }
+
+      const tokenPayload = {
+        _id: existingStudent._id.toString(),
+        email: existingStudent.email,
+        role: existingStudent.role,
+      };
+      const tokenString = await StudentTokenService.savePasswordResetToken(tokenPayload);
+
+      
+      const resetLink = `http://localhost:3001/student/reset-password?email=${email}&token=${tokenString}`;
+
+      // Send email with the reset link
+      const transporter = nodemailer.createTransport({
+        service: 'hotmail',
+        auth: {
+          user: 'smartattendance1@hotmail.com',
+          pass: 'Fypproject'
+        }
+      });
+
+      await transporter.sendMail({
+        from: 'smartattendance1@hotmail.com',
+        to: email,
+        subject: 'Password Reset Link',
+        html: `Click <a href="${resetLink}">here</a> to reset your password.`,
+      });
+
+return;
+      
+    } catch (e) {
+      console.error(e.message);
+      return "Failed to send reset link. Please try again later.";
+    }
+  }
 
   static async getParentAccountDetails(parentId) {
     try {

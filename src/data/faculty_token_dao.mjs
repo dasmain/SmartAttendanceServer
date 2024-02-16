@@ -27,7 +27,20 @@ export default class FacultyTokenDAO {
       return null;
     }
   }
-
+  static async savePasswordResetTokenToDB(token) {
+    try {
+     
+      const insertionResult = await facultyTokenCon.insertOne(token);
+      if (insertionResult && insertionResult.insertedId) {
+        return insertionResult.insertedId;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      console.error(`Unable to save password reset token: ${e}`);
+      return null;
+    }
+  }
   static async getFacultyTokenFromDB(token) {
     try {
       const tokenObject = await facultyTokenCon.findOne({ token: token });

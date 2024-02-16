@@ -28,7 +28,7 @@ export default class FacultyDAO {
       return null;
     }
   }
-
+  
   static async getFacultyByEmailFromDB(email) {
     try {
       const faculty = await facultyCon.findOne({ email: email });
