@@ -27,6 +27,7 @@ export default class CourseService {
         courseCode: courseCode,
         courseName: courseName,
         courseCredHrs: courseCredHrs,
+        studentsEnrolled: null,
         courseTeacher: null,
         created_on: createdOn,
         deleted_on: deletedOn,
@@ -58,6 +59,7 @@ export default class CourseService {
     courseCode,
     courseName,
     courseCredHrs,
+    studentsEnrolled,
     courseTeacher
   ) {
     try {
@@ -94,6 +96,10 @@ export default class CourseService {
 
       if (courseTeacher) {
         existingCourse.courseTeacher = courseTeacher;
+      }
+
+      if (studentsEnrolled) {
+        existingCourse.studentsEnrolled = studentsEnrolled;
       }
 
       const updateResult = await CourseDAO.updateCourseInDB(existingCourse);

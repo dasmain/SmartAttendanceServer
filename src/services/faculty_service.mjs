@@ -14,7 +14,7 @@ export default class FacultyService {
     }
   }
 
-  static async addFaculty(firstName, lastName, username, email, password, contactno, isStudentAdvisor) {
+  static async addFaculty(name, email, password, contactno, isStudentAdvisor) {
     try {
       const existingFaculty = await FacultyDAO.getFacultyByEmailFromDB(email);
       if (existingFaculty) {
@@ -34,9 +34,7 @@ export default class FacultyService {
       const deletedOn = null;
 
       const facultyDocument = {
-        firstName: firstName,
-        lastName: lastName,
-        username: username,
+        name: name,
         email:email,
         password: hashedPassword,
         contactno: contactno,
@@ -176,33 +174,20 @@ export default class FacultyService {
     }
   }
 
-  static async updateFacultyAccountDetails(facultyId, firstName, lastName, username,email, contactno, isStudentAdvisor) {
+  static async updateFacultyAccountDetails(facultyId, name, email, contactno, isStudentAdvisor) {
     try {
       const existingFaculty = await FacultyDAO.getFacultyByIDFromDB(facultyId);
       if (!existingFaculty) {
         return "No user found for this ID";
       }
   
-      if (firstName) {
-        const firstNameCheck = PatternUtil.checkAlphabeticName(firstName);
-        if (!firstNameCheck) {
+      if (name) {
+        const nameCheck = PatternUtil.checkAlphabeticName(name);
+        if (!nameCheck) {
           return "First name can not contain numbers and special characters";
         } else {
-          existingFaculty.firstName = firstName;
+          existingFaculty.name = name;
         }
-      }
-  
-      if (lastName) {
-        const lastNameCheck = PatternUtil.checkAlphabeticName(lastName);
-        if (!lastNameCheck) {
-          return "Last name can not contain numbers and special characters";
-        } else {
-          existingFaculty.lastName = lastName;
-        }
-      }
-      
-      if (username) {
-        existingFaculty.username = username;
       }
   
       if (email) {

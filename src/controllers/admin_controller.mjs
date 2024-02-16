@@ -124,30 +124,30 @@ export default class AdminController {
     }
   }
 
-  static async apiUpdateAccountDetails(req, res, next) {
-    try {
-      const { firstname, lastname } = req.body;
-      const token = req.headers["authorization"];
-      const tokenDetails = await TokenUtil.getDataFromToken(token);
-      const serviceResponse = await AdminService.updateAdminAccountDetails(
-        tokenDetails.user_id,
-        firstname,
-        lastname
-      );
+  // static async apiUpdateAccountDetails(req, res, next) {
+  //   try {
+  //     const { firstname, lastname } = req.body;
+  //     const token = req.headers["authorization"];
+  //     const tokenDetails = await TokenUtil.getDataFromToken(token);
+  //     const serviceResponse = await AdminService.updateAdminAccountDetails(
+  //       tokenDetails.user_id,
+  //       firstname,
+  //       lastname
+  //     );
 
-      if (typeof serviceResponse === "string") {
-        res
-          .status(200)
-          .json({ success: false, data: {}, message: serviceResponse });
-      } else {
-        res.status(200).json({
-          success: true,
-          data: serviceResponse,
-          message: "User account details updated successfully",
-        });
-      }
-    } catch (e) {
-      res.status(500).json({ success: false, data: {}, message: e.message });
-    }
-  }
+  //     if (typeof serviceResponse === "string") {
+  //       res
+  //         .status(200)
+  //         .json({ success: false, data: {}, message: serviceResponse });
+  //     } else {
+  //       res.status(200).json({
+  //         success: true,
+  //         data: serviceResponse,
+  //         message: "User account details updated successfully",
+  //       });
+  //     }
+  //   } catch (e) {
+  //     res.status(500).json({ success: false, data: {}, message: e.message });
+  //   }
+  // }
 }

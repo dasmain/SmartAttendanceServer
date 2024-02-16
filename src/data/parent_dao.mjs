@@ -41,7 +41,7 @@ export default class ParentDAO {
 
   static async getParentByIDFromDB(id) {
     try {
-      const parent = await parentCon.findOne({ _id: id });
+      const parent = await parentCon.findOne({ _id: new ObjectId(id) });
       return parent;
     } catch (e) {
       console.error(`Unable to get parent by ID: ${e}`);

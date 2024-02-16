@@ -1,5 +1,5 @@
 import databaseConfig from "../config/database_config.mjs";
-import { ObjectId } from 'mongodb';
+import { ObjectId } from "mongodb";
 
 let coursecon;
 
@@ -9,7 +9,9 @@ export default class CourseRequestDAO {
       return;
     }
     try {
-      coursecon = conn.db(databaseConfig.database.dbName).collection("course_request");
+      coursecon = conn
+        .db(databaseConfig.database.dbName)
+        .collection("course_request");
     } catch (e) {
       console.error(`Unable to establish a collection handle: ${e}`);
     }
@@ -80,6 +82,31 @@ export default class CourseRequestDAO {
       return true;
     } catch (e) {
       console.error(`Unable to delete course: ${e}`);
+      return null;
+    }
+  }
+
+  static async getCourseRequestByCourseAndStudent(courseId, studentId) {
+    try {
+      const existingRequest = await coursecon.findOne({
+        courseId: courseId,
+        studentId: studentId,
+      });
+      return existingRequest;
+    } catch (e) {
+      console.error(`Unable to get course request: ${e}`);
+      return null;
+    }
+  }
+
+  static async getCourseRequestByStudent(studentId) {
+    try {
+      const existingRequest = await coursecon.find({
+        studentId: studentId,
+      }).toArray();
+      return existingRequest;
+    } catch (e) {
+      console.error(`Unable to get course request: ${e}`);
       return null;
     }
   }

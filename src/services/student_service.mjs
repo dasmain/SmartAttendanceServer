@@ -14,9 +14,7 @@ export default class StudentService {
   }
 
   static async addStudent(
-    firstname,
-    lastname,
-    username,
+    name,
     email,
     password,
     contactno
@@ -36,8 +34,7 @@ export default class StudentService {
       }
 
       const nameCheck =
-        PatternUtil.checkAlphabeticName(firstname) &&
-        PatternUtil.checkAlphabeticName(lastname);
+        PatternUtil.checkAlphabeticName(name);
       if (!nameCheck) {
         return "Name can not contain numbers and special characters";
       }
@@ -47,9 +44,7 @@ export default class StudentService {
       const deletedOn = null;
 
       const userDocument = {
-        firstname: firstname,
-        lastname: lastname,
-        username: username,
+        name: name,
         email: email,
         password: hashedPassword,
         contactno: contactno,
@@ -146,7 +141,7 @@ export default class StudentService {
       } else {
         const filteredStudent = PatternUtil.filterParametersFromObject(
           existingStudent,
-          ["_id", "password", "role"]
+          ["password", "role"]
         );
 
         return { user: filteredStudent };
@@ -198,9 +193,7 @@ export default class StudentService {
 
   static async updateStudentAccountDetails(
     studentId,
-    firstname,
-    lastname,
-    username,
+    name,
     email,
     contactno
   ) {
@@ -210,16 +203,8 @@ export default class StudentService {
         return "No user found for this ID";
       }
 
-      if (firstname) {
-        existingStudent.firstname = firstname;
-      }
-
-      if (lastname) {
-        existingStudent.lastname = lastname;
-      }
-
-      if (username) {
-        existingStudent.username = username;
+      if (name) {
+        existingStudent.name = name;
       }
 
       if (email) {

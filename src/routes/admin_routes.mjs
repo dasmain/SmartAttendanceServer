@@ -30,9 +30,9 @@ router
     AdminController.apiUpdateAccountPassword
   );
 
-router
-  .route(userRoute + "/update")
-  .post(checkTokenMiddleware, AdminController.apiUpdateAccountDetails);
+// router
+//   .route(userRoute + "/update")
+//   .post(checkTokenMiddleware, AdminController.apiUpdateAccountDetails);
 
 router
   .route(userRoute + "/sign-out")

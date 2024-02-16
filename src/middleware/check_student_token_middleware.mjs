@@ -16,7 +16,6 @@ const checkStudentTokenMiddleware = async (req, res, next) => {
 
     if (decoded) {
       tokenObject = await TokenUtil.getStudentDataFromToken(token);
-console.log(tokenObject);
       if (!tokenObject) {
         errorMessage = "Malformed or unknown token in the header";
       } else {

@@ -63,18 +63,18 @@ export default class AdminDAO {
     }
   }
 
-  static async updateAdminAccountInDB(user) {
-    try {
-      const updateResult = await admincon.updateOne(
-        { _id: user._id },
-        {
-          $set: user,
-        }
-      );
-      return true;
-    } catch (e) {
-      console.error(`Unable to get user by ID: ${e}`);
-      return null;
-    }
-  }
+  // static async updateAdminAccountInDB(user) {
+  //   try {
+  //     const updateResult = await admincon.updateOne(
+  //       { _id: user._id },
+  //       {
+  //         $set: user,
+  //       }
+  //     );
+  //     return true;
+  //   } catch (e) {
+  //     console.error(`Unable to get user by ID: ${e}`);
+  //     return null;
+  //   }
+  // }
 }

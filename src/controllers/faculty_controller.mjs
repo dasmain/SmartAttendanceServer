@@ -4,13 +4,11 @@ import TokenUtil from "../utility/token_util.mjs";
 export default class FacultyController {
   static async apiCreateFacultyAccount(req, res, next) {
     try {
-      const { firstName, lastName, username, email, password, contactno, isStudentAdvisor } =
+      const { name, email, password, contactno, isStudentAdvisor } =
         req.body;
 
       const serviceResponse = await FacultyService.addFaculty(
-        firstName,
-        lastName,
-        username,
+        name,
         email,
         password,
         contactno,
@@ -162,7 +160,7 @@ export default class FacultyController {
 
   static async apiUpdateFacultyAccountDetails(req, res, next) {
     try {
-      const { firstName, lastName, username, email, contactno, isStudentAdvisor } = req.body;
+      const { name, email, contactno, isStudentAdvisor } = req.body;
 
       const _id = req.query._id;
       if (!_id) {
@@ -175,9 +173,7 @@ export default class FacultyController {
 
       const serviceResponse = await FacultyService.updateFacultyAccountDetails(
         _id,
-        firstName,
-        lastName,
-        username,
+        name,
         email,
         contactno,
         isStudentAdvisor

@@ -5,13 +5,12 @@ import TokenUtil from "../utility/token_util.mjs";
 export default class CourseController {
   static async apiCreateCourse(req, res, next) {
     try {
-      const { courseCode, courseName, courseCredHrs, courseTeacher } = req.body;
+      const { courseCode, courseName, courseCredHrs } = req.body;
 
       const serviceResponse = await CourseService.addCourse(
         courseCode,
         courseName,
         courseCredHrs,
-        courseTeacher
       );
 
       if (typeof serviceResponse === "string") {
@@ -86,12 +85,13 @@ export default class CourseController {
         });
       }
 
-      const { courseCode, courseName, courseCredHrs, courseTeacher } = req.body;
+      const { courseCode, courseName, courseCredHrs, studentsEnrolled, courseTeacher } = req.body;
       const serviceResponse = await CourseService.updateCourseDetails(
         course_id,
         courseCode,
         courseName,
         courseCredHrs,
+        studentsEnrolled,
         courseTeacher
       );
 

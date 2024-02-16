@@ -12,9 +12,7 @@ router
   .route(facultyRoute + "/create")
   .post(
     checkRequiredFieldsMiddleware([
-      "firstName",
-      "lastName",
-      "username",
+      "name",
       "email",
       "password",
       "contactno",

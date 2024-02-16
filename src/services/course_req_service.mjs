@@ -13,6 +13,16 @@ export default class CourseRequestsService {
 
   static async addCourseRequest(courseId, studentId, status) {
     try {
+      const existingRequest =
+        await CourseRequestDAO.getCourseRequestByCourseAndStudent(
+          courseId,
+          studentId
+        );
+
+      if (existingRequest) {
+        return "Request already made!";
+      }
+
       const createdOn = new Date();
       const deletedOn = null;
 
@@ -99,11 +109,28 @@ export default class CourseRequestsService {
 
   static async deleteCourseRequest(_id) {
     try {
-      const resultObject = await CourseRequestDAO.deleteCourseRequestFromDB(_id);
+      const resultObject = await CourseRequestDAO.deleteCourseRequestFromDB(
+        _id
+      );
       return resultObject;
     } catch (e) {
       console.log(e.message);
       return null;
+    }
+  }
+
+  static async getCourseRequestByStudent(studentId) {
+    try {
+      const existingCourse = await CourseRequestDAO.getCourseRequestByStudent(
+        studentId
+      );
+      if (!existingCourse) {
+        return "No course request found for this Student";
+      } else {
+        return existingCourse;
+      }
+    } catch (e) {
+      return e.message;
     }
   }
 }

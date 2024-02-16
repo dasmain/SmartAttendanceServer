@@ -1,23 +1,24 @@
 import ParentService from "../services/parent_service.mjs";
+import StudentService from "../services/student_service.mjs";
 import TokenUtil from "../utility/token_util.mjs";
 
 export default class ParentController {
   static async apiCreateParentAccount(req, res, next) {
     try {
-      const { username, email, password, contactno, 
-        //studentID 
-    } = req.body;
+      const { name, email, password, contactno, studentID } = req.body;
 
       const serviceResponse = await ParentService.addParent(
-        username,
+        name,
         email,
         password,
         contactno,
-       // studentID
+        studentID
       );
-      
+
       if (typeof serviceResponse === "string") {
-        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
       } else {
         res.status(200).json({
           success: true,
@@ -34,13 +35,12 @@ export default class ParentController {
     try {
       const { email, password } = req.body;
 
-      const serviceResponse = await ParentService.signInParent(
-        email,
-        password
-      );
+      const serviceResponse = await ParentService.signInParent(email, password);
 
       if (typeof serviceResponse === "string") {
-        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
       } else {
         res.status(200).json({
           success: true,
@@ -85,7 +85,50 @@ export default class ParentController {
       );
 
       if (typeof serviceResponse === "string") {
-        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: serviceResponse,
+          message: "Parent account details fetched successfully",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({ success: false, data: {}, message: e.message });
+    }
+  }
+
+  static async apiGetParentAccountDetailsById(req, res, next) {
+    try {
+      const _id = req.query._id;
+
+      if (!_id) {
+        return res.status(400).json({
+          success: false,
+          data: {},
+          message: "_id parameter is missing",
+        });
+      }
+
+      const serviceResponse = await ParentService.getParentAccountDetails(
+        _id
+      );
+
+      if (serviceResponse.user.studentID != null) {
+        const forStudentResponse =
+          await StudentService.getStudentAccountDetails(
+            serviceResponse.user.studentID
+          );
+
+        serviceResponse.user.studentID = forStudentResponse.user;
+      }
+
+      if (typeof serviceResponse === "string") {
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
       } else {
         res.status(200).json({
           success: true,
@@ -110,7 +153,9 @@ export default class ParentController {
       );
 
       if (typeof serviceResponse === "string") {
-        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
       } else {
         res.status(200).json({
           success: true,
@@ -125,18 +170,28 @@ export default class ParentController {
 
   static async apiUpdateParentAccountDetails(req, res, next) {
     try {
-      const { username, email, contactno } = req.body;
-      const token = req.headers["authorization"];
-      const tokenDetails = await TokenUtil.getParentDataFromToken(token);
+      const { name, email, contactno } = req.body;
+      const _id = req.query._id;
+
+      if (!_id) {
+        return res.status(400).json({
+          success: false,
+          data: {},
+          message: "_id parameter is missing",
+        });
+      }
+
       const serviceResponse = await ParentService.updateParentAccountDetails(
-        tokenDetails.user_id,
-        username,
+        _id,
+        name,
         email,
         contactno
       );
 
       if (typeof serviceResponse === "string") {
-        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
       } else {
         res.status(200).json({
           success: true,
@@ -153,6 +208,17 @@ export default class ParentController {
     try {
       const serviceResponse = await ParentService.getAllParentForAdmin();
 
+      for (let i = 0; i < serviceResponse.length; i++) {
+        const course = serviceResponse[i];
+        if (course.studentID != null) {
+          const forStudentResponse = await StudentService.getStudentAccountDetails(
+            course.studentID
+          );
+
+          course.studentID = forStudentResponse;
+        }
+      }
+
       if (typeof serviceResponse === "string") {
         res
           .status(200)
@@ -168,7 +234,7 @@ export default class ParentController {
       res.status(500).json({ success: false, data: {}, message: e.message });
     }
   }
-  
+
   static async apiDeleteParentAccount(req, res, next) {
     try {
       const _id = req.query._id;

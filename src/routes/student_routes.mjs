@@ -10,7 +10,7 @@ const studentRoute = "/student";
 // API routes
 router.route(studentRoute + "/create").post(
   checkRequiredFieldsMiddleware([
-    "username",
+    "name",
     "email",
     "password",
     "contactno",

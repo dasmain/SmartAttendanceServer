@@ -13,9 +13,7 @@ export default class ParentService {
     }
   }
 
-  static async addParent(username, email, password, contactno, 
-    //studentID
-    ) {
+  static async addParent(name, email, password, contactno, studentID) {
     try {
       const existingUser = await ParentDAO.getParentByEmailFromDB(email);
       if (existingUser) {
@@ -35,11 +33,11 @@ export default class ParentService {
       const deletedOn = null;
 
       const userDocument = {
-        username: username,
+        name: name,
         email: email,
         password: hashedPassword,
         contactno: contactno,
-       // studentID: studentID,
+        studentID: studentID,
         role: "parent",
         created_on: createdOn,
         deleted_on: deletedOn,
@@ -80,12 +78,13 @@ export default class ParentService {
         role: existingParent.role,
         signedInOn: signedInOn,
       };
-      const tokenString = await ParentTokenService.createParentToken(tokenPayload);
-      const filteredParent = PatternUtil.filterParametersFromObject(existingParent, [
-        "_id",
-        "password",
-        "role",
-      ]);
+      const tokenString = await ParentTokenService.createParentToken(
+        tokenPayload
+      );
+      const filteredParent = PatternUtil.filterParametersFromObject(
+        existingParent,
+        ["_id", "password", "role"]
+      );
 
       return {
         token: tokenString,
@@ -100,7 +99,9 @@ export default class ParentService {
   static async signOutParent(token) {
     try {
       const cleanedToken = TokenUtil.cleanToken(token);
-      const deleteToken = await ParentTokenService.deleteParentToken(cleanedToken);
+      const deleteToken = await ParentTokenService.deleteParentToken(
+        cleanedToken
+      );
 
       return deleteToken;
     } catch (e) {
@@ -129,7 +130,7 @@ export default class ParentService {
       } else {
         const filteredParent = PatternUtil.filterParametersFromObject(
           existingParent,
-          ["_id", "password","role"]
+          ["_id", "password", "role"]
         );
 
         return { user: filteredParent };
@@ -175,15 +176,15 @@ export default class ParentService {
     }
   }
 
-  static async updateParentAccountDetails(parentId, username, email, contactno) {
+  static async updateParentAccountDetails(parentId, name, email, contactno) {
     try {
       const existingParent = await ParentDAO.getParentByIDFromDB(parentId);
       if (!existingParent) {
         return "No user found for this ID";
       }
 
-      if (username) {
-        existingParent.username = username;
+      if (name) {
+        existingParent.name = name;
       }
 
       if (email) {
@@ -194,7 +195,9 @@ export default class ParentService {
         existingParent.contactno = contactno;
       }
 
-      const updateResult = await ParentDAO.updateParentAccountInDB(existingParent);
+      const updateResult = await ParentDAO.updateParentAccountInDB(
+        existingParent
+      );
 
       if (updateResult) {
         return {};

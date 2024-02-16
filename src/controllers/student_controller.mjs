@@ -4,18 +4,14 @@ import TokenUtil from "../utility/token_util.mjs";
 export default class StudentController {
   static async apiCreateStudentAccount(req, res, next) {
     try {
-      const { firstname, lastname, username, email, password, contactno, 
-        //studentID 
+      const {name, email, password, contactno,
     } = req.body;
 
       const serviceResponse = await StudentService.addStudent(
-        firstname,
-        lastname,
-        username,
+        name,
         email,
         password,
         contactno,
-       // studentID
       );
       
       if (typeof serviceResponse === "string") {
@@ -157,14 +153,20 @@ export default class StudentController {
 
   static async apiUpdateStudentAccountDetails(req, res, next) {
     try {
-      const { firstname, lastname, username, email, contactno } = req.body;
-      const token = req.headers["authorization"];
-      const tokenDetails = await TokenUtil.getDataFromToken(token);
+      const { name, email, contactno } = req.body;
+      const _id = req.query._id;
+
+      if (!_id) {
+        return res.status(400).json({
+          success: false,
+          data: {},
+          message: "_id parameter is missing",
+        });
+      }
+
       const serviceResponse = await StudentService.updateStudentAccountDetails(
-        tokenDetails.user_id,
-        firstname,
-        lastname,
-        username,
+        _id,
+        name,
         email,
         contactno
       );

@@ -5,6 +5,7 @@ import parentroutes from "./routes/parent_routes.mjs";
 import studentroutes from "./routes/student_routes.mjs";
 import facultyroutes from "./routes/faculty_routes.mjs";
 import courseroutes from "./routes/course_routes.mjs";
+import coursereqroutes from "./routes/course_requests_routes.mjs";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use("/api/v1", parentroutes);
 app.use("/api/v1", studentroutes);
 app.use("/api/v1", facultyroutes);
 app.use("/api/v1", courseroutes);
+app.use("/api/v1", coursereqroutes);
 
 app.use("*", (req, res) => res.status(404).json({ Error: "Not Found" }));
 

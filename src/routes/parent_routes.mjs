@@ -10,7 +10,7 @@ const parentRoute = "/parent";
 // API routes
 router.route(parentRoute + "/create").post(
   checkRequiredFieldsMiddleware([
-    "username",
+    "name",
     "email",
     "password",
     "contactno",
@@ -47,12 +47,16 @@ router
   .route(parentRoute + "/details")
   .get(checkParentTokenMiddleware, ParentController.apiGetParentAccountDetails);
 
-  router
+router
   .route(parentRoute + "/alldetails")
   .get(checkTokenMiddleware, ParentController.apiGetAllParentAccountDetails);
 
-  router
+router
   .route(parentRoute + "/delete")
   .delete(checkTokenMiddleware, ParentController.apiDeleteParentAccount);
+
+router
+  .route(parentRoute + "/detailsbyid")
+  .get(checkTokenMiddleware, ParentController.apiGetParentAccountDetailsById);
 
 export default router;

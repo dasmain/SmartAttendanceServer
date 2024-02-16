@@ -178,40 +178,40 @@ export default class AdminService {
     }
   }
 
-  static async updateAdminAccountDetails(userId, firstName, lastName) {
-    try {
-      const existingUser = await AdminDAO.getAdminByIDFromDB(userId);
-      if (!existingUser) {
-        return "No user found for this ID";
-      }
+  // static async updateAdminAccountDetails(userId, firstName, lastName) {
+  //   try {
+  //     const existingUser = await AdminDAO.getAdminByIDFromDB(userId);
+  //     if (!existingUser) {
+  //       return "No user found for this ID";
+  //     }
 
-      if (firstName) {
-        const firstNameCheck = PatternUtil.checkAlphabeticName(firstName);
-        if (!firstNameCheck) {
-          return "Name can not contain numbers and special characters";
-        } else {
-          existingUser.firstname = firstName;
-        }
-      }
+  //     if (firstName) {
+  //       const firstNameCheck = PatternUtil.checkAlphabeticName(firstName);
+  //       if (!firstNameCheck) {
+  //         return "Name can not contain numbers and special characters";
+  //       } else {
+  //         existingUser.firstname = firstName;
+  //       }
+  //     }
 
-      if (lastName) {
-        const lastNameCheck = PatternUtil.checkAlphabeticName(lastName);
-        if (!lastNameCheck) {
-          return "Name can not contain numbers and special characters";
-        } else {
-          existingUser.lastname = lastName;
-        }
-      }
+  //     if (lastName) {
+  //       const lastNameCheck = PatternUtil.checkAlphabeticName(lastName);
+  //       if (!lastNameCheck) {
+  //         return "Name can not contain numbers and special characters";
+  //       } else {
+  //         existingUser.lastname = lastName;
+  //       }
+  //     }
 
-      const updateResult = await AdminDAO.updateAdminAccountInDB(existingUser);
+  //     const updateResult = await AdminDAO.updateAdminAccountInDB(existingUser);
 
-      if (updateResult) {
-        return {};
-      } else {
-        return "Failed to update the password";
-      }
-    } catch (e) {
-      return e.message;
-    }
-  }
+  //     if (updateResult) {
+  //       return {};
+  //     } else {
+  //       return "Failed to update the password";
+  //     }
+  //   } catch (e) {
+  //     return e.message;
+  //   }
+  // }
 }
