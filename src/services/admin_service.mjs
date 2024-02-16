@@ -135,7 +135,7 @@ export default class AdminService {
           ["_id", "password", "role"]
         );
 
-        return { user: filteredUsers };
+        return { admin: filteredUsers };
       }
     } catch (e) {
       return e.message;

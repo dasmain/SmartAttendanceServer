@@ -144,7 +144,7 @@ export default class StudentService {
           ["password", "role"]
         );
 
-        return { user: filteredStudent };
+        return filteredStudent;
       }
     } catch (e) {
       return e.message;

@@ -131,7 +131,7 @@ export default class FacultyService {
           ["password","role"]
         );
 
-        return { user: filteredFaculty };
+        return filteredFaculty;
       }
     } catch (e) {
       return e.message;

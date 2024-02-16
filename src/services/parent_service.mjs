@@ -133,7 +133,7 @@ export default class ParentService {
           ["_id", "password", "role"]
         );
 
-        return { user: filteredParent };
+        return filteredParent;
       }
     } catch (e) {
       return e.message;
