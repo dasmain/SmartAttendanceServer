@@ -3,6 +3,7 @@ import AuthUtil from "../utility/auth_util.mjs";
 import PatternUtil from "../utility/pattern_util.mjs";
 import TokenUtil from "../utility/token_util.mjs";
 import FacultyTokenService from "./faculty_token_service.mjs";
+import nodemailer from 'nodemailer';
 
 
 export default class FacultyService {

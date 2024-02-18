@@ -243,8 +243,9 @@ export default class StudentService {
       };
       const tokenString = await StudentTokenService.savePasswordResetToken(tokenPayload);
 
-      
+      // const now = moment.tz('Asia/Karachi');
       const resetLink = `http://localhost:3001/student/reset-password?email=${email}&token=${tokenString}`;
+      // const formattedDate = moment.tz('Asia/Karachi').format('YYYY-MM-DD HH:mm:ss');
 
       // Send email with the reset link
       const transporter = nodemailer.createTransport({
