@@ -203,7 +203,7 @@ export default class ParentController {
 
   static async apiUpdateParentAccountDetails(req, res, next) {
     try {
-      const { name, email, contactno } = req.body;
+      const { name, email, contactno,studentID } = req.body;
       const _id = req.query._id;
 
       if (!_id) {
@@ -218,7 +218,8 @@ export default class ParentController {
         _id,
         name,
         email,
-        contactno
+        contactno,
+        studentID
       );
 
       if (typeof serviceResponse === "string") {

@@ -217,7 +217,7 @@ return;
     }
   }
 
-  static async updateParentAccountDetails(parentId, name, email, contactno) {
+  static async updateParentAccountDetails(parentId, name, email, contactno,studentID) {
     try {
       const existingParent = await ParentDAO.getParentByIDFromDB(parentId);
       if (!existingParent) {
@@ -234,6 +234,9 @@ return;
 
       if (contactno) {
         existingParent.contactno = contactno;
+      }
+      if (studentID) {
+        existingParent.studentID = studentID;
       }
 
       const updateResult = await ParentDAO.updateParentAccountInDB(
