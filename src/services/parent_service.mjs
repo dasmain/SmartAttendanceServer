@@ -137,7 +137,7 @@ export default class ParentService {
       const tokenString = await ParentTokenService.savePasswordResetToken(tokenPayload);
 
       
-      const resetLink = `http://localhost:3001/student/reset-password?email=${email}&token=${tokenString}`;
+      const resetLink = `http://localhost:3001/parent/reset-password?email=${email}&parentToken=${tokenString}`;
 
       // Send email with the reset link
       const transporter = nodemailer.createTransport({

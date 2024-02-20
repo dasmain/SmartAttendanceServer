@@ -122,7 +122,7 @@ export default class FacultyService {
       const tokenString = await FacultyTokenService.savePasswordResetToken(tokenPayload);
 
       
-      const resetLink = `http://localhost:3001/student/reset-password?email=${email}&token=${tokenString}`;
+      const resetLink = `http://localhost:3001/faculty/reset-password?email=${email}&facultyToken=${tokenString}`;
 
       // Send email with the reset link
       const transporter = nodemailer.createTransport({
