@@ -78,4 +78,12 @@ router
   .route(facultyRoute + "/detailsbyid")
   .get(checkTokenMiddleware, FacultyController.apiGetFacultyAccountDetailsByID);
 
+  router
+  .route(facultyRoute + "/updatebyid/password")
+  .post(
+    checkRequiredFieldsMiddleware(["new_password"]),
+    checkTokenMiddleware,
+    FacultyController.apiUpdateFacultyAccountPasswordByAdmin
+  );
+
 export default router;
