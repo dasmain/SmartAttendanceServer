@@ -4,8 +4,7 @@ import TokenUtil from "../utility/token_util.mjs";
 export default class FacultyController {
   static async apiCreateFacultyAccount(req, res, next) {
     try {
-      const { name, email, password, contactno, isStudentAdvisor } =
-        req.body;
+      const { name, email, password, contactno, isStudentAdvisor } = req.body;
 
       const serviceResponse = await FacultyService.addFaculty(
         name,
@@ -113,7 +112,9 @@ export default class FacultyController {
           message: "_id parameter is missing",
         });
       }
-      const serviceResponse = await FacultyService.getFacultyAccountDetails(_id);
+      const serviceResponse = await FacultyService.getFacultyAccountDetails(
+        _id
+      );
 
       if (typeof serviceResponse === "string") {
         res
@@ -137,7 +138,9 @@ export default class FacultyController {
 
       const serviceResponse = await FacultyService.forgotFacultyPassword(email);
       if (typeof serviceResponse === "string") {
-        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
       } else {
         res.status(200).json({
           success: true,
@@ -152,14 +155,20 @@ export default class FacultyController {
   static async apiGetFacultyTokenValidation(req, res, next) {
     try {
       const token = req.headers["authorization"];
-  
+
       // Validate the token
       // const isValidToken = await StudentService.validateResetPasswordToken(token);
       const tokenDetails = await TokenUtil.getFacultyDataFromToken(token);
       if (tokenDetails) {
-        res.status(200).json({ success: true, data: {}, message: "Token is valid" });
+        res
+          .status(200)
+          .json({ success: true, data: {}, message: "Token is valid" });
       } else {
-        res.status(400).json({ success: false, data: {}, message: "Invalid or expired token" });
+        res.status(400).json({
+          success: false,
+          data: {},
+          message: "Invalid or expired token",
+        });
       }
     } catch (e) {
       res.status(500).json({ success: false, data: {}, message: e.message });
@@ -175,6 +184,32 @@ export default class FacultyController {
         old_password,
         new_password
       );
+
+      if (typeof serviceResponse === "string") {
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: serviceResponse,
+          message: "Faculty account password updated successfully",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({ success: false, data: {}, message: e.message });
+    }
+  }
+
+  static async apiUpdateFacultyAccountPasswordByAdmin(req, res, next) {
+    try {
+      const _id = req.query._id;
+      const { new_password } = req.body;
+      const serviceResponse =
+        await FacultyService.updateFacultyAccountPasswordByAdmin(
+          _id,
+          new_password
+        );
 
       if (typeof serviceResponse === "string") {
         res

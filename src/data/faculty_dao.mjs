@@ -1,5 +1,5 @@
 import databaseConfig from "../config/database_config.mjs";
-import { ObjectId } from 'mongodb';
+import { ObjectId } from "mongodb";
 
 let facultyCon;
 
@@ -9,7 +9,9 @@ export default class FacultyDAO {
       return;
     }
     try {
-      facultyCon = conn.db(databaseConfig.database.dbName).collection("faculty");
+      facultyCon = conn
+        .db(databaseConfig.database.dbName)
+        .collection("faculty");
     } catch (e) {
       console.error(`Unable to establish a collection handle: ${e}`);
     }
@@ -28,7 +30,7 @@ export default class FacultyDAO {
       return null;
     }
   }
-  
+
   static async getFacultyByEmailFromDB(email) {
     try {
       const faculty = await facultyCon.findOne({ email: email });
@@ -53,6 +55,21 @@ export default class FacultyDAO {
     try {
       const updateResult = await facultyCon.updateOne(
         { email },
+        {
+          $set: { password: newPassword },
+        }
+      );
+      return true;
+    } catch (e) {
+      console.error(`Unable to update faculty password: ${e}`);
+      return false;
+    }
+  }
+
+  static async updateFacultyPasswordInDBByAdmin(_id, newPassword) {
+    try {
+      const updateResult = await facultyCon.updateOne(
+        { _id: new ObjectId(_id) },
         {
           $set: { password: newPassword },
         }
@@ -98,5 +115,4 @@ export default class FacultyDAO {
       return null;
     }
   }
-
 }

@@ -214,6 +214,33 @@ return;
     }
   }
 
+  static async updateFacultyAccountPasswordByAdmin(facultyId, newPassword) {
+    try {
+      const existingFaculty = await FacultyDAO.getFacultyByIDFromDB(facultyId);
+      if (!existingFaculty) {
+        return "No user found for this ID";
+      }
+
+      const newPasswordCheck = PatternUtil.checkPasswordLength(newPassword);
+      if (!newPasswordCheck) {
+        return "Password's length should be greater than 8 characters";
+      }
+      const hashedPassword = await AuthUtil.hashPassword(newPassword);
+      const updateResult = await FacultyDAO.updateFacultyPasswordInDBByAdmin(
+        facultyId,
+        hashedPassword
+      );
+
+      if (updateResult) {
+        return {};
+      } else {
+        return "Failed to update the password";
+      }
+    } catch (e) {
+      return e.message;
+    }
+  }
+
   static async updateFacultyAccountDetails(facultyId, name, email, contactno, isStudentAdvisor) {
     try {
       const existingFaculty = await FacultyDAO.getFacultyByIDFromDB(facultyId);
