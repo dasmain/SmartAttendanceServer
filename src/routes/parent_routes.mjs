@@ -72,4 +72,12 @@ router
   .route(parentRoute + "/detailsbyid")
   .get(checkTokenMiddleware, ParentController.apiGetParentAccountDetailsById);
 
+router
+  .route(parentRoute + "/updatebyid/password")
+  .post(
+    checkRequiredFieldsMiddleware(["new_password"]),
+    checkTokenMiddleware,
+    ParentController.apiUpdateParentAccountPasswordByAdmin
+  );
+
 export default router;

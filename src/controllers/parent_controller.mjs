@@ -81,7 +81,9 @@ export default class ParentController {
 
       const serviceResponse = await ParentService.forgotParentPassword(email);
       if (typeof serviceResponse === "string") {
-        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
       } else {
         res.status(200).json({
           success: true,
@@ -96,14 +98,22 @@ export default class ParentController {
   static async apiGetParentTokenValidation(req, res, next) {
     try {
       const token = req.headers["authorization"];
-  
+
       // Validate the token
       // const isValidToken = await StudentService.validateResetPasswordToken(token);
       const tokenDetails = await TokenUtil.getParentDataFromToken(token);
       if (tokenDetails) {
-        res.status(200).json({ success: true, data: {}, message: "Token is valid" });
+        res
+          .status(200)
+          .json({ success: true, data: {}, message: "Token is valid" });
       } else {
-        res.status(400).json({ success: false, data: {}, message: "Invalid or expired token" });
+        res
+          .status(400)
+          .json({
+            success: false,
+            data: {},
+            message: "Invalid or expired token",
+          });
       }
     } catch (e) {
       res.status(500).json({ success: false, data: {}, message: e.message });
@@ -145,9 +155,7 @@ export default class ParentController {
         });
       }
 
-      const serviceResponse = await ParentService.getParentAccountDetails(
-        _id
-      );
+      const serviceResponse = await ParentService.getParentAccountDetails(_id);
 
       if (serviceResponse.studentID != null) {
         const forStudentResponse =
@@ -201,9 +209,42 @@ export default class ParentController {
     }
   }
 
+  static async apiUpdateParentAccountPasswordByAdmin(req, res, next) {
+    try {
+      const _id = req.query._id;
+      if (!_id) {
+        return res.status(400).json({
+          success: false,
+          data: {},
+          message: "_id parameter is missing",
+        });
+      }
+      const { new_password } = req.body;
+      const serviceResponse =
+        await ParentService.updateParentAccountPasswordByAdmin(
+          _id,
+          new_password
+        );
+
+      if (typeof serviceResponse === "string") {
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: serviceResponse,
+          message: "Parent account password updated successfully",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({ success: false, data: {}, message: e.message });
+    }
+  }
+
   static async apiUpdateParentAccountDetails(req, res, next) {
     try {
-      const { name, email, contactno,studentID } = req.body;
+      const { name, email, contactno, studentID } = req.body;
       const _id = req.query._id;
 
       if (!_id) {
@@ -245,9 +286,8 @@ export default class ParentController {
       for (let i = 0; i < serviceResponse.length; i++) {
         const course = serviceResponse[i];
         if (course.studentID != null) {
-          const forStudentResponse = await StudentService.getStudentAccountDetails(
-            course.studentID
-          );
+          const forStudentResponse =
+            await StudentService.getStudentAccountDetails(course.studentID);
 
           course.studentID = forStudentResponse;
         }

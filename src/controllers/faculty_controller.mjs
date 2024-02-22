@@ -204,6 +204,13 @@ export default class FacultyController {
   static async apiUpdateFacultyAccountPasswordByAdmin(req, res, next) {
     try {
       const _id = req.query._id;
+      if (!_id) {
+        return res.status(400).json({
+          success: false,
+          data: {},
+          message: "_id parameter is missing",
+        });
+      }
       const { new_password } = req.body;
       const serviceResponse =
         await FacultyService.updateFacultyAccountPasswordByAdmin(

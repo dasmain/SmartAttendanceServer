@@ -80,4 +80,12 @@ router
     StudentController.apiGetStudentAccountDetailsByID
   );
 
+  router
+  .route(studentRoute + "/updatebyid/password")
+  .post(
+    checkRequiredFieldsMiddleware(["new_password"]),
+    checkTokenMiddleware,
+    StudentController.apiUpdateStudentAccountPasswordByAdmin
+  );
+
 export default router;

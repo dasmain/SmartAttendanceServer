@@ -64,6 +64,21 @@ export default class ParentDAO {
     }
   }
 
+  static async updateParentPasswordInDBByAdmin(_id, newPassword) {
+    try {
+      const updateResult = await parentCon.updateOne(
+        { _id: new ObjectId(_id) },
+        {
+          $set: { password: newPassword },
+        }
+      );
+      return true;
+    } catch (e) {
+      console.error(`Unable to update parent password: ${e}`);
+      return false;
+    }
+  }
+
   static async updateParentAccountInDB(parent) {
     try {
       const updateResult = await parentCon.updateOne(

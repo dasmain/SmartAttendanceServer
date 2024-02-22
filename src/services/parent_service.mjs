@@ -217,6 +217,33 @@ return;
     }
   }
 
+  static async updateParentAccountPasswordByAdmin(parentId, newPassword) {
+    try {
+      const existingParent = await ParentDAO.getParentByIDFromDB(parentId);
+      if (!existingParent) {
+        return "No user found for this ID";
+      }
+
+      const newPasswordCheck = PatternUtil.checkPasswordLength(newPassword);
+      if (!newPasswordCheck) {
+        return "Password's length should be greater than 8 characters";
+      }
+      const hashedPassword = await AuthUtil.hashPassword(newPassword);
+      const updateResult = await ParentDAO.updateParentPasswordInDBByAdmin(
+        parentId,
+        hashedPassword
+      );
+
+      if (updateResult) {
+        return {};
+      } else {
+        return "Failed to update the password";
+      }
+    } catch (e) {
+      return e.message;
+    }
+  }
+
   static async updateParentAccountDetails(parentId, name, email, contactno,studentID) {
     try {
       const existingParent = await ParentDAO.getParentByIDFromDB(parentId);

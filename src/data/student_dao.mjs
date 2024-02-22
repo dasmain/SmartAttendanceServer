@@ -1,5 +1,5 @@
 import databaseConfig from "../config/database_config.mjs";
-import { ObjectId } from 'mongodb';
+import { ObjectId } from "mongodb";
 
 let studentCon;
 
@@ -9,7 +9,9 @@ export default class StudentDAO {
       return;
     }
     try {
-      studentCon = conn.db(databaseConfig.database.dbName).collection("students");
+      studentCon = conn
+        .db(databaseConfig.database.dbName)
+        .collection("students");
     } catch (e) {
       console.error(`Unable to establish a collection handle: ${e}`);
     }
@@ -64,6 +66,21 @@ export default class StudentDAO {
     }
   }
 
+  static async updateStudentPasswordInDBByAdmin(_id, newPassword) {
+    try {
+      const updateResult = await studentCon.updateOne(
+        { _id: new ObjectId(_id) },
+        {
+          $set: { password: newPassword },
+        }
+      );
+      return true;
+    } catch (e) {
+      console.error(`Unable to update student password: ${e}`);
+      return false;
+    }
+  }
+
   static async updateStudentAccountInDB(student) {
     try {
       const updateResult = await studentCon.updateOne(
@@ -98,5 +115,4 @@ export default class StudentDAO {
       return null;
     }
   }
-  
 }

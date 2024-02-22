@@ -4,18 +4,19 @@ import TokenUtil from "../utility/token_util.mjs";
 export default class StudentController {
   static async apiCreateStudentAccount(req, res, next) {
     try {
-      const {name, email, password, contactno,
-    } = req.body;
+      const { name, email, password, contactno } = req.body;
 
       const serviceResponse = await StudentService.addStudent(
         name,
         email,
         password,
-        contactno,
+        contactno
       );
-      
+
       if (typeof serviceResponse === "string") {
-        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
       } else {
         res.status(200).json({
           success: true,
@@ -38,7 +39,9 @@ export default class StudentController {
       );
 
       if (typeof serviceResponse === "string") {
-        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
       } else {
         res.status(200).json({
           success: true,
@@ -83,7 +86,9 @@ export default class StudentController {
       );
 
       if (typeof serviceResponse === "string") {
-        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
       } else {
         res.status(200).json({
           success: true,
@@ -113,7 +118,9 @@ export default class StudentController {
       );
 
       if (typeof serviceResponse === "string") {
-        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
       } else {
         res.status(200).json({
           success: true,
@@ -138,7 +145,42 @@ export default class StudentController {
       );
 
       if (typeof serviceResponse === "string") {
-        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: serviceResponse,
+          message: "Student account password updated successfully",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({ success: false, data: {}, message: e.message });
+    }
+  }
+
+  static async apiUpdateStudentAccountPasswordByAdmin(req, res, next) {
+    try {
+      const _id = req.query._id;
+      if (!_id) {
+        return res.status(400).json({
+          success: false,
+          data: {},
+          message: "_id parameter is missing",
+        });
+      }
+      const { new_password } = req.body;
+      const serviceResponse =
+        await StudentService.updateStudentAccountPasswordByAdmin(
+          _id,
+          new_password
+        );
+
+      if (typeof serviceResponse === "string") {
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
       } else {
         res.status(200).json({
           success: true,
@@ -172,7 +214,9 @@ export default class StudentController {
       );
 
       if (typeof serviceResponse === "string") {
-        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
       } else {
         res.status(200).json({
           success: true,
@@ -191,7 +235,9 @@ export default class StudentController {
 
       const serviceResponse = await StudentService.forgotPassword(email);
       if (typeof serviceResponse === "string") {
-        res.status(200).json({ success: false, data: {}, message: serviceResponse });
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
       } else {
         res.status(200).json({
           success: true,
@@ -207,14 +253,22 @@ export default class StudentController {
   static async apiGetStudentTokenValidation(req, res, next) {
     try {
       const token = req.headers["authorization"];
-  
+
       // Validate the token
       // const isValidToken = await StudentService.validateResetPasswordToken(token);
       const tokenDetails = await TokenUtil.getStudentDataFromToken(token);
       if (tokenDetails) {
-        res.status(200).json({ success: true, data: {}, message: "Token is valid" });
+        res
+          .status(200)
+          .json({ success: true, data: {}, message: "Token is valid" });
       } else {
-        res.status(400).json({ success: false, data: {}, message: "Invalid or expired token" });
+        res
+          .status(400)
+          .json({
+            success: false,
+            data: {},
+            message: "Invalid or expired token",
+          });
       }
     } catch (e) {
       res.status(500).json({ success: false, data: {}, message: e.message });

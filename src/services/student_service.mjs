@@ -3,7 +3,7 @@ import AuthUtil from "../utility/auth_util.mjs";
 import PatternUtil from "../utility/pattern_util.mjs";
 import TokenUtil from "../utility/token_util.mjs";
 import StudentTokenService from "./student_token_service.mjs";
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
 export default class StudentService {
   static async connectDatabase(client) {
     try {
@@ -13,12 +13,7 @@ export default class StudentService {
     }
   }
 
-  static async addStudent(
-    name,
-    email,
-    password,
-    contactno
-  ) {
+  static async addStudent(name, email, password, contactno) {
     try {
       const existingUser = await StudentDAO.getStudentByEmailFromDB(email);
       if (existingUser) {
@@ -33,8 +28,7 @@ export default class StudentService {
         return "Please enter a valid email";
       }
 
-      const nameCheck =
-        PatternUtil.checkAlphabeticName(name);
+      const nameCheck = PatternUtil.checkAlphabeticName(name);
       if (!nameCheck) {
         return "Name can not contain numbers and special characters";
       }
@@ -191,12 +185,34 @@ export default class StudentService {
     }
   }
 
-  static async updateStudentAccountDetails(
-    studentId,
-    name,
-    email,
-    contactno
-  ) {
+  static async updateStudentAccountPasswordByAdmin(studentId, newPassword) {
+    try {
+      const existingStudent = await StudentDAO.getStudentByIDFromDB(studentId);
+      if (!existingStudent) {
+        return "No user found for this ID";
+      }
+
+      const newPasswordCheck = PatternUtil.checkPasswordLength(newPassword);
+      if (!newPasswordCheck) {
+        return "Password's length should be greater than 8 characters";
+      }
+      const hashedPassword = await AuthUtil.hashPassword(newPassword);
+      const updateResult = await StudentDAO.updateStudentPasswordInDBByAdmin(
+        studentId,
+        hashedPassword
+      );
+
+      if (updateResult) {
+        return {};
+      } else {
+        return "Failed to update the password";
+      }
+    } catch (e) {
+      return e.message;
+    }
+  }
+
+  static async updateStudentAccountDetails(studentId, name, email, contactno) {
     try {
       const existingStudent = await StudentDAO.getStudentByIDFromDB(studentId);
       if (!existingStudent) {
@@ -241,7 +257,9 @@ export default class StudentService {
         email: existingStudent.email,
         role: existingStudent.role,
       };
-      const tokenString = await StudentTokenService.savePasswordResetToken(tokenPayload);
+      const tokenString = await StudentTokenService.savePasswordResetToken(
+        tokenPayload
+      );
 
       // const now = moment.tz('Asia/Karachi');
       const resetLink = `http://localhost:3001/student/reset-password?email=${email}&studentToken=${tokenString}`;
@@ -249,22 +267,21 @@ export default class StudentService {
 
       // Send email with the reset link
       const transporter = nodemailer.createTransport({
-        service: 'hotmail',
+        service: "hotmail",
         auth: {
-          user: 'smartattendance1@hotmail.com',
-          pass: 'Fypproject'
-        }
+          user: "smartattendance1@hotmail.com",
+          pass: "Fypproject",
+        },
       });
 
       await transporter.sendMail({
-        from: 'smartattendance1@hotmail.com',
+        from: "smartattendance1@hotmail.com",
         to: email,
-        subject: 'Password Reset Link',
+        subject: "Password Reset Link",
         html: `Click <a href="${resetLink}">here</a> to reset your password.`,
       });
 
-return;
-      
+      return;
     } catch (e) {
       console.error(e.message);
       return "Failed to send reset link. Please try again later.";
@@ -275,7 +292,7 @@ return;
   //   try {
   //     // Retrieve token object from the database
   //     const tokenObject = await StudentTokenService.getStudentToken(token);
-  
+
   //     // Check if the token object exists and is valid
   //     if (tokenObject) {
   //       // Additional validation checks can be performed here if needed
