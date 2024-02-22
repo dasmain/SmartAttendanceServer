@@ -48,6 +48,13 @@ router
     FacultyController.apiUpdateFacultyAccountPassword
   );
 
+  router
+  .route(facultyRoute + "/reset-password")
+  .post(
+    checkRequiredFieldsMiddleware(["new_password"]),
+    checkFacultyTokenMiddleware,
+    FacultyController.apiResetFacultyAccountPassword
+  );
 router
   .route(facultyRoute + "/edit/details")
   .post(checkTokenMiddleware, FacultyController.apiUpdateFacultyAccountDetails);

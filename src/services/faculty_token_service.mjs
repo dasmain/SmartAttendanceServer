@@ -34,9 +34,12 @@ export default class FacultyTokenService {
   static async savePasswordResetToken(payload) {
     try {
       const tokenString = TokenUtil.createToken(payload);
+      const userId = new ObjectId(payload._id);
+
       const role = payload.role;
 
       const tokenDocument = {
+        user_id: userId,
         token: tokenString,
         role: role,
       };
