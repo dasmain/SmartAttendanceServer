@@ -134,6 +134,30 @@ export default class CourseRequestController {
             null
           );
         }
+      } else if (status == "rejected") {
+        const courseResponse = await CourseRequestsService.getCourseRequestByID(
+          _id
+        );
+
+        const forCourseResponse = await CourseService.getCourseByID(
+          courseResponse.courseId
+        );
+
+        if (forCourseResponse.studentsEnrolled) {
+          forCourseResponse.studentsEnrolled =
+            forCourseResponse.studentsEnrolled.filter(
+              (enrolledStudentId) =>
+                enrolledStudentId !== courseResponse.studentId
+            );
+          await CourseService.updateCourseDetails(
+            courseResponse.courseId,
+            null,
+            null,
+            null,
+            forCourseResponse.studentsEnrolled,
+            null
+          );
+        }
       }
 
       if (typeof serviceResponse === "string") {
