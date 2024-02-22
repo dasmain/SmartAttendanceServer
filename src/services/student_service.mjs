@@ -211,6 +211,32 @@ export default class StudentService {
       return e.message;
     }
   }
+  static async resetStudentAccountPassword(studentId, newPassword) {
+    try {
+      const existingStudent = await StudentDAO.getStudentByIDFromDB(studentId);
+      if (!existingStudent) {
+        return "No user found for this ID";
+      }
+
+      const newPasswordCheck = PatternUtil.checkPasswordLength(newPassword);
+      if (!newPasswordCheck) {
+        return "Password's length should be greater than 8 characters";
+      }
+      const hashedPassword = await AuthUtil.hashPassword(newPassword);
+      const updateResult = await StudentDAO.updateStudentPasswordInDBByAdmin(
+        studentId,
+        hashedPassword
+      );
+
+      if (updateResult) {
+        return {};
+      } else {
+        return "Failed to update the password";
+      }
+    } catch (e) {
+      return e.message;
+    }
+  }
 
   static async updateStudentAccountDetails(studentId, name, email, contactno) {
     try {

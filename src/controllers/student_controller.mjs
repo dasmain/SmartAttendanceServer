@@ -192,6 +192,31 @@ export default class StudentController {
       res.status(500).json({ success: false, data: {}, message: e.message });
     }
   }
+  static async apiResetStudentAccountPassword(req, res, next) {
+    try {
+      const { new_password } = req.body;
+      const token = req.headers["authorization"];
+      const tokenDetails = await TokenUtil.getStudentDataFromToken(token);
+      const serviceResponse = await StudentService.resetStudentAccountPassword(
+        tokenDetails.user_id,
+        new_password
+      );
+
+      if (typeof serviceResponse === "string") {
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: serviceResponse,
+          message: "Student account password updated successfully",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({ success: false, data: {}, message: e.message });
+    }
+  }
 
   static async apiUpdateStudentAccountDetails(req, res, next) {
     try {

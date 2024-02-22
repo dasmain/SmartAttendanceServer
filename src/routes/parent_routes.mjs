@@ -26,6 +26,15 @@ router
     checkRequiredFieldsMiddleware(["email"]),
     ParentController.apiParentForgotPassword
   );
+
+  router
+  .route(parentRoute + "/reset-password")
+  .post(
+    checkRequiredFieldsMiddleware(["new_password"]),
+    checkParentTokenMiddleware,
+    ParentController.apiResetParentAccountPassword
+  );
+
 router
   .route(parentRoute + "/validate-reset-pass-token")
   .get(

@@ -241,6 +241,31 @@ export default class ParentController {
       res.status(500).json({ success: false, data: {}, message: e.message });
     }
   }
+  static async apiResetParentAccountPassword(req, res, next) {
+    try {
+      const { new_password } = req.body;
+      const token = req.headers["authorization"];
+      const tokenDetails = await TokenUtil.getParentDataFromToken(token);
+      const serviceResponse = await ParentService.resetParentAccountPassword(
+        tokenDetails.user_id,
+        new_password
+      );
+
+      if (typeof serviceResponse === "string") {
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: serviceResponse,
+          message: "Parent account password updated successfully",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({ success: false, data: {}, message: e.message });
+    }
+  }
 
   static async apiUpdateParentAccountDetails(req, res, next) {
     try {

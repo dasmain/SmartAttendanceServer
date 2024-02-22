@@ -180,7 +180,34 @@ return;
       return e.message;
     }
   }
+ 
+  static async resetParentAccountPassword(parentId, newPassword) {
+    try {
+      const existingParent = await ParentDAO.getParentByIDFromDB(parentId);
+      if (!existingParent) {
+        return "No user found for this ID";
+      }
 
+
+      const newPasswordCheck = PatternUtil.checkPasswordLength(newPassword);
+      if (!newPasswordCheck) {
+        return "Password's length should be greater than 8 characters";
+      }
+      const hashedPassword = await AuthUtil.hashPassword(newPassword);
+      const updateResult = await ParentDAO.updateParentPasswordInDB(
+        existingParent.email,
+        hashedPassword
+      );
+
+      if (updateResult) {
+        return {};
+      } else {
+        return "Failed to update the password";
+      }
+    } catch (e) {
+      return e.message;
+    }
+  }
   static async updateParentAccountPassword(parentId, oldPassword, newPassword) {
     try {
       const existingParent = await ParentDAO.getParentByIDFromDB(parentId);

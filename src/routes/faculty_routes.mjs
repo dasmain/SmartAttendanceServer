@@ -55,6 +55,7 @@ router
     checkFacultyTokenMiddleware,
     FacultyController.apiResetFacultyAccountPassword
   );
+  
 router
   .route(facultyRoute + "/edit/details")
   .post(checkTokenMiddleware, FacultyController.apiUpdateFacultyAccountDetails);
