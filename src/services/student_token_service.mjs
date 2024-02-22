@@ -55,10 +55,13 @@ export default class StudentTokenService {
   static async savePasswordResetToken(payload) {
     try {
       const tokenString = TokenUtil.createToken(payload);
+      const userId = new ObjectId(payload._id);
+
       const role = payload.role;
 
       const tokenDocument = {
         token: tokenString,
+        user_id: userId,
         role: role,
       };
       const addedTokenId = await StudentTokenDAO.savePasswordResetTokenToDB(tokenDocument);
