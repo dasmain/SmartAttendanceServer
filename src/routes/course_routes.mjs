@@ -1,6 +1,7 @@
 import express from "express";
 import checkRequiredFieldsMiddleware from "../middleware/check_required_fields_middleware.mjs";
 import checkTokenMiddleware from "../middleware/check_token_middleware.mjs";
+import checkFacultyTokenMiddleware from "../middleware/check_faculty_token_middleware.mjs";
 import CourseController from "../controllers/course_controller.mjs";
 
 const router = express.Router();
@@ -34,5 +35,9 @@ router
 router
   .route(courseRoute + "/delete")
   .delete(checkTokenMiddleware, CourseController.apiDeleteCourse);
+
+router
+  .route(courseRoute + "/details-by-teacher")
+  .get(checkFacultyTokenMiddleware, CourseController.apiGetCourseDetailsByTeacher);
 
 export default router;

@@ -49,6 +49,16 @@ export default class CourseDAO {
     }
   }
 
+  static async getCourseByCoureTeacherFromDB(courseTeacher) {
+    try {
+      const course = await coursecon.findOne({ courseTeacher: courseTeacher });
+      return course;
+    } catch (e) {
+      console.error(`Unable to get faculty by course code: ${e}`);
+      return null;
+    }
+  }
+
   static async updateCourseInDB(course) {
     try {
       const updateResult = await coursecon.updateOne(

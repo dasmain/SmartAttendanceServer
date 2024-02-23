@@ -74,6 +74,51 @@ export default class CourseController {
     }
   }
 
+  static async apiGetCourseDetailsByTeacher(req, res, next) {
+    try {
+      const courseTeacher = req.query._id;
+
+      if (!courseTeacher) {
+        return res.status(400).json({
+          success: false,
+          data: {},
+          message: "_id parameter is missing",
+        });
+      }
+
+      const serviceResponse = await CourseService.getCourseByTeacher(courseTeacher);
+
+      if (serviceResponse.courseTeacher != null) {
+        const forFacultyResponse =
+          await FacultyService.getFacultyAccountDetails(
+            serviceResponse.courseTeacher
+          );
+
+        serviceResponse.courseTeacher = forFacultyResponse;
+      }
+
+      if (typeof serviceResponse === "string") {
+        res.status(200).json({
+          success: false,
+          data: {},
+          message: serviceResponse,
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: serviceResponse,
+          message: "Course details fetched successfully",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        data: {},
+        message: e.message,
+      });
+    }
+  }
+
   static async apiUpdateCourseDetails(req, res, next) {
     try {
       const course_id = req.query._id;

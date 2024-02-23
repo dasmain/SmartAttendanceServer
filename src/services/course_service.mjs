@@ -1,6 +1,6 @@
 import CourseDAO from "../data/course_dao.mjs";
 import PatternUtil from "../utility/pattern_util.mjs";
-import { ObjectId } from 'mongodb';
+import { ObjectId } from "mongodb";
 
 export default class CourseService {
   static async connectDatabase(client) {
@@ -54,6 +54,21 @@ export default class CourseService {
     }
   }
 
+  static async getCourseByTeacher(courseTeacher) {
+    try {
+      const existingCourse = await CourseDAO.getCourseByCoureTeacherFromDB(
+        courseTeacher
+      );
+      if (!existingCourse) {
+        return "No course found for this ID";
+      } else {
+        return existingCourse;
+      }
+    } catch (e) {
+      return e.message;
+    }
+  }
+
   static async updateCourseDetails(
     courseId,
     courseCode,
@@ -68,7 +83,7 @@ export default class CourseService {
         return "No course found for this ID";
       }
 
-      if (courseCode != existingCourse.courseCode) {
+      if (courseCode && courseCode != existingCourse.courseCode) {
         const existingCourseCheck2 = await CourseDAO.getCourseByCoursCodeFromDB(
           courseCode
         );
