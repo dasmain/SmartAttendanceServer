@@ -225,6 +225,7 @@ export default class FacultyController {
       res.status(500).json({ success: false, data: {}, message: e.message });
     }
   }
+  
 
 
   static async apiUpdateFacultyAccountPasswordByAdmin(req, res, next) {

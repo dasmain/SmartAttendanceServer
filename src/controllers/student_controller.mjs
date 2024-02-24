@@ -80,7 +80,7 @@ export default class StudentController {
   static async apiGetStudentAccountDetails(req, res, next) {
     try {
       const token = req.headers["authorization"];
-      const tokenDetails = await TokenUtil.getDataFromToken(token);
+      const tokenDetails = await TokenUtil.getStudentDataFromToken(token);
       const serviceResponse = await StudentService.getStudentAccountDetails(
         tokenDetails.user_id
       );
