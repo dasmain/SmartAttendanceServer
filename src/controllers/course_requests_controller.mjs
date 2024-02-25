@@ -134,7 +134,7 @@ export default class CourseRequestController {
             null
           );
         }
-      } else if (status == "rejected") {
+      } else if (status == "removed") {
         const courseResponse = await CourseRequestsService.getCourseRequestByID(
           _id
         );
