@@ -22,7 +22,7 @@ export default class LeaveService {
     try {
       const existingRequest = await LeaveDAO.getLeaveByStudentFromDB(studentId);
 
-      if (existingRequest.status == "pending") {
+      if (existingRequest && existingRequest.status == "pending") {
         return "Leave already applied for!";
       }
 

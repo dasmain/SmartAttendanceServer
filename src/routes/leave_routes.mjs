@@ -12,13 +12,13 @@ const courseRoute = "/leave";
 router
   .route(courseRoute + "/create")
   .post(
-    checkRequiredFieldsMiddleware([
-      "studentId",
-      "subject",
-      "fromDate",
-      "toDate",
-      "reason",
-    ]),
+    // checkRequiredFieldsMiddleware([
+    //   "studentId",
+    //   "subject",
+    //   "fromDate",
+    //   "toDate",
+    //   "reason",
+    // ]),
     checkStudentTokenMiddleware,
     LeaveController.apiCreateLeave
   );

@@ -2,39 +2,51 @@ import LeaveService from "../services/leave_service.mjs";
 import CourseService from "../services/course_service.mjs";
 import StudentService from "../services/student_service.mjs";
 import TokenUtil from "../utility/token_util.mjs";
+import multer from "multer";
+import fs from "fs";
+const upload = multer({ dest: "src/files/leave_attachments" });
 
 export default class LeaveController {
   static async apiCreateLeave(req, res, next) {
     try {
-      const {
-        studentId,
-        subject,
-        fromDate,
-        toDate,
-        attachment,
-        reason
-      } = req.body;
+      upload.single("attachment")(req, res, async function (err) {
+        if (err) {
+          return res
+            .status(500)
+            .json({ success: false, data: {}, message: err.message });
+        }
 
-      const serviceResponse = await LeaveService.addLeave(
-        studentId,
-        subject,
-        fromDate,
-        toDate,
-        attachment,
-        reason
-      );
+        const { studentId, subject, fromDate, toDate, reason } = req.body;
 
-      if (typeof serviceResponse === "string") {
-        res
-          .status(200)
-          .json({ success: false, data: {}, message: serviceResponse });
-      } else {
-        res.status(200).json({
-          success: true,
-          data: serviceResponse,
-          message: "Leave Request created successfully",
-        });
-      }
+        let attachmentData = null;
+
+        if (req.file) {
+          const fileData = fs.readFileSync(req.file.path);
+          attachmentData = fileData;
+          fs.unlinkSync(req.file.path);
+        }
+
+        const serviceResponse = await LeaveService.addLeave(
+          studentId,
+          subject,
+          fromDate,
+          toDate,
+          attachmentData,
+          reason
+        );
+
+        if (typeof serviceResponse === "string") {
+          res
+            .status(200)
+            .json({ success: false, data: {}, message: serviceResponse });
+        } else {
+          res.status(200).json({
+            success: true,
+            data: serviceResponse,
+            message: "Leave Request created successfully",
+          });
+        }
+      });
     } catch (e) {
       res.status(500).json({ success: false, data: {}, message: e.message });
     }
@@ -62,6 +74,10 @@ export default class LeaveController {
 
         serviceResponse.studentId = forStudentResponse;
       }
+
+      const fileData = serviceResponse.attachment;
+      const base64EncodedPDF = fileData.toString("base64");
+      serviceResponse.attachment = base64EncodedPDF;
 
       if (typeof serviceResponse === "string") {
         res.status(200).json({
@@ -143,6 +159,10 @@ export default class LeaveController {
             await StudentService.getStudentAccountDetails(course.studentId);
 
           course.studentId = forStudentResponse;
+
+          const fileData = course.attachment;
+          const base64EncodedPDF = fileData.toString("base64");
+          course.attachment = base64EncodedPDF;
         }
       }
 
