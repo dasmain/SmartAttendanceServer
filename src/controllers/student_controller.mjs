@@ -137,7 +137,7 @@ export default class StudentController {
     try {
       const { old_password, new_password } = req.body;
       const token = req.headers["authorization"];
-      const tokenDetails = await TokenUtil.getDataFromToken(token);
+      const tokenDetails = await TokenUtil.getStudentDataFromToken(token);
       const serviceResponse = await StudentService.updateStudentAccountPassword(
         tokenDetails.user_id,
         old_password,
