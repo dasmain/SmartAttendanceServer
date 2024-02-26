@@ -16,7 +16,11 @@ export default class LeaveController {
             .json({ success: false, data: {}, message: err.message });
         }
 
-        const { studentId, subject, fromDate, toDate, reason } = req.body;
+        const token = req.headers["authorization"];
+        const tokenDetails = await TokenUtil.getStudentDataFromToken(token);
+        const _id = tokenDetails.user_id.toString();
+
+        const { subject, fromDate, toDate, reason } = req.body;
 
         let attachmentData = null;
 
@@ -27,7 +31,7 @@ export default class LeaveController {
         }
 
         const serviceResponse = await LeaveService.addLeave(
-          studentId,
+          _id,
           subject,
           fromDate,
           toDate,

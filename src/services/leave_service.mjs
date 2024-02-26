@@ -44,7 +44,7 @@ export default class LeaveService {
 
       const addedLeave = await LeaveDAO.addLeaveToDB(leaveDocument);
 
-      return { course: addedLeave };
+      return { _id: addedLeave };
     } catch (e) {
       return e.message;
     }
