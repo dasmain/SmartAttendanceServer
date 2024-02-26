@@ -1,5 +1,5 @@
 import databaseConfig from "../config/database_config.mjs";
-import { ObjectId } from 'mongodb';
+import { ObjectId } from "mongodb";
 
 let leavecon;
 
@@ -31,7 +31,7 @@ export default class LeaveDAO {
 
   static async getLeaveByIDFromDB(_id) {
     try {
-      const leave = await leavecon.findOne({ _id: new ObjectId(_id) });
+      const leave = await leavecon.find({ studentId: _id }).toArray();
       return leave;
     } catch (e) {
       console.error(`Unable to get leave by ID: ${e}`);

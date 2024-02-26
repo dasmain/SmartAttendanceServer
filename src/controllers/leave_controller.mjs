@@ -228,7 +228,6 @@ export default class LeaveController {
       const token = req.headers["authorization"];
       const tokenDetails = await TokenUtil.getStudentDataFromToken(token);
       const _id = tokenDetails.user_id.toString();
-
       const serviceResponse = await LeaveService.getLeaveByStudent(_id);
 
       for (let i = 0; i < serviceResponse.length; i++) {
