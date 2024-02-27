@@ -79,9 +79,11 @@ export default class LeaveController {
         serviceResponse.studentId = forStudentResponse;
       }
 
-      const fileData = serviceResponse.attachment;
-      const base64EncodedPDF = fileData.toString("base64");
-      serviceResponse.attachment = base64EncodedPDF;
+      if (serviceResponse.attachment) {
+        const fileData = serviceResponse.attachment;
+        const base64EncodedPDF = fileData.toString("base64");
+        serviceResponse.attachment = base64EncodedPDF;
+      }
 
       if (typeof serviceResponse === "string") {
         res.status(200).json({
@@ -164,9 +166,11 @@ export default class LeaveController {
 
           course.studentId = forStudentResponse;
 
-          const fileData = course.attachment;
-          const base64EncodedPDF = fileData.toString("base64");
-          course.attachment = base64EncodedPDF;
+          if (course.attachment) {
+            const fileData = course.attachment;
+            const base64EncodedPDF = fileData.toString("base64");
+            course.attachment = base64EncodedPDF;
+          }
         }
       }
 
@@ -237,6 +241,12 @@ export default class LeaveController {
             await StudentService.getStudentAccountDetails(course.studentId);
 
           course.studentId = forStudentResponse;
+
+          if (course.attachment) {
+            const fileData = course.attachment;
+            const base64EncodedPDF = fileData.toString("base64");
+            course.attachment = base64EncodedPDF;
+          }
         }
       }
 
