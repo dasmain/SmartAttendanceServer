@@ -31,7 +31,7 @@ export default class LeaveDAO {
 
   static async getLeaveByIDFromDB(_id) {
     try {
-      const leave = await leavecon.find({ studentId: _id }).toArray();
+      const leave = await leavecon.findOne({ _id: new ObjectId(_id) });
       return leave;
     } catch (e) {
       console.error(`Unable to get leave by ID: ${e}`);
@@ -41,7 +41,7 @@ export default class LeaveDAO {
 
   static async getLeaveByStudentFromDB(studentId) {
     try {
-      const leave = await leavecon.findOne({ studentId: studentId });
+      const leave = await leavecon.find({ studentId: studentId }).toArray();
       return leave;
     } catch (e) {
       console.error(`Unable to get leave by ID: ${e}`);

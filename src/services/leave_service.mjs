@@ -144,7 +144,7 @@ export default class LeaveService {
 
   static async getLeaveByStudent(studentId) {
     try {
-      const existingCourse = await LeaveDAO.getLeaveByIDFromDB(studentId);
+      const existingCourse = await LeaveDAO.getLeaveByStudentFromDB(studentId);
       if (!existingCourse) {
         return "No leave found for this Student";
       } else {
