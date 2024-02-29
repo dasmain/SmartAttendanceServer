@@ -29,6 +29,7 @@ export default class CourseService {
         courseCredHrs: courseCredHrs,
         studentsEnrolled: null,
         courseTeacher: null,
+        status: "pending",
         created_on: createdOn,
         deleted_on: deletedOn,
       };
@@ -111,6 +112,8 @@ export default class CourseService {
 
       if (courseTeacher) {
         existingCourse.courseTeacher = courseTeacher;
+
+        existingCourse.status = "assigned";
       }
 
       if (studentsEnrolled) {

@@ -25,12 +25,16 @@ router
   .post(checkTokenMiddleware, CourseController.apiUpdateCourseDetails);
 
 router
+  .route(courseRoute + "/update-by-advisor")
+  .post(checkFacultyTokenMiddleware, CourseController.apiUpdateCourseDetails);
+
+router
   .route(courseRoute + "/details")
   .get(checkTokenMiddleware, CourseController.apiGetCourseDetails);
 
 router
   .route(courseRoute + "/alldetails")
-  .get( CourseController.apiGetAllCourseDetails);
+  .get(CourseController.apiGetAllCourseDetails);
 
 router
   .route(courseRoute + "/delete")
@@ -38,6 +42,9 @@ router
 
 router
   .route(courseRoute + "/details-by-teacher")
-  .get(checkFacultyTokenMiddleware, CourseController.apiGetCourseDetailsByTeacher);
+  .get(
+    checkFacultyTokenMiddleware,
+    CourseController.apiGetCourseDetailsByTeacher
+  );
 
 export default router;
