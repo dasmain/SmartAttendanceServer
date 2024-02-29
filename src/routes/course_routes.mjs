@@ -30,7 +30,7 @@ router
 
 router
   .route(courseRoute + "/alldetails")
-  .get(checkTokenMiddleware, CourseController.apiGetAllCourseDetails);
+  .get( CourseController.apiGetAllCourseDetails);
 
 router
   .route(courseRoute + "/delete")
