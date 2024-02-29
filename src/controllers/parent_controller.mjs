@@ -107,25 +107,63 @@ export default class ParentController {
           .status(200)
           .json({ success: true, data: {}, message: "Token is valid" });
       } else {
-        res
-          .status(400)
-          .json({
-            success: false,
-            data: {},
-            message: "Invalid or expired token",
-          });
+        res.status(400).json({
+          success: false,
+          data: {},
+          message: "Invalid or expired token",
+        });
       }
     } catch (e) {
       res.status(500).json({ success: false, data: {}, message: e.message });
     }
   }
-  static async apiGetParentAccountDetails(req, res, next) {
+  
+  // static async apiGetParentAccountDetails(req, res, next) {
+  //   try {
+  //     const token = req.headers["authorization"];
+  //     const tokenDetails = await TokenUtil.getParentDataFromToken(token);
+  //     const serviceResponse = await ParentService.getParentAccountDetails(
+  //       tokenDetails.user_id
+  //     );
+
+  //     if (typeof serviceResponse === "string") {
+  //       res
+  //         .status(200)
+  //         .json({ success: false, data: {}, message: serviceResponse });
+  //     } else {
+  //       res.status(200).json({
+  //         success: true,
+  //         data: serviceResponse,
+  //         message: "Parent account details fetched successfully",
+  //       });
+  //     }
+  //   } catch (e) {
+  //     res.status(500).json({ success: false, data: {}, message: e.message });
+  //   }
+  // }
+
+  static async apiGetParentAccountDetailsById(req, res, next) {
     try {
-      const token = req.headers["authorization"];
-      const tokenDetails = await TokenUtil.getParentDataFromToken(token);
-      const serviceResponse = await ParentService.getParentAccountDetails(
-        tokenDetails.user_id
-      );
+      const _id = req.query._id;
+
+      if (!_id) {
+        return res.status(400).json({
+          success: false,
+          data: {},
+          message: "_id parameter is missing",
+        });
+      }
+
+      const serviceResponse = await ParentService.getParentAccountDetails(_id);
+
+      if (serviceResponse.studentID != null) {
+        const forStudentResponse =
+          await StudentService.getStudentAccountDetails(
+            serviceResponse.studentID
+          );
+
+        serviceResponse.studentID = forStudentResponse;
+      }
 
       if (typeof serviceResponse === "string") {
         res
@@ -143,19 +181,13 @@ export default class ParentController {
     }
   }
 
-  static async apiGetParentAccountDetailsById(req, res, next) {
+  static async apiGetParentAccountDetails(req, res, next) {
     try {
-      const _id = req.query._id;
-
-      if (!_id) {
-        return res.status(400).json({
-          success: false,
-          data: {},
-          message: "_id parameter is missing",
-        });
-      }
-
-      const serviceResponse = await ParentService.getParentAccountDetails(_id);
+      const token = req.headers["authorization"];
+      const tokenDetails = await TokenUtil.getParentDataFromToken(token);
+      const serviceResponse = await ParentService.getParentAccountDetails(
+        tokenDetails.user_id
+      );
 
       if (serviceResponse.studentID != null) {
         const forStudentResponse =
