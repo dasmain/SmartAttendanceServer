@@ -114,6 +114,8 @@ export default class CourseService {
         existingCourse.courseTeacher = courseTeacher;
 
         existingCourse.status = "assigned";
+      } else if (courseTeacher == "N/A") {
+        existingCourse.status = "pending";
       }
 
       if (studentsEnrolled) {
