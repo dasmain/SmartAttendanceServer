@@ -26,7 +26,7 @@ router
 
 router
   .route(courseRoute + "/update-by-advisor")
-  .post(checkFacultyTokenMiddleware, CourseController.apiUpdateCourseDetails);
+  .post(checkFacultyTokenMiddleware, CourseController.apiUpdateCourseTeacher);
 
 router
   .route(courseRoute + "/details")

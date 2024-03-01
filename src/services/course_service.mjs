@@ -110,16 +110,21 @@ export default class CourseService {
         existingCourse.courseCredHrs = courseCredHrs;
       }
 
-      if (courseTeacher) {
-        existingCourse.courseTeacher = courseTeacher;
-
-        existingCourse.status = "assigned";
-      } else if (courseTeacher == "N/A") {
+      if (courseTeacher == "N/A") {
+        existingCourse.courseTeacher = null;
         existingCourse.status = "pending";
+      } else if (courseTeacher) {
+        existingCourse.courseTeacher = courseTeacher;
+        existingCourse.status = "assigned";
+      } else {
+        if (!existingCourse.courseTeacher) {
+          existingCourse.status = "pending";
+        }
       }
 
       if (studentsEnrolled) {
         existingCourse.studentsEnrolled = studentsEnrolled;
+        D;
       }
 
       const updateResult = await CourseDAO.updateCourseInDB(existingCourse);
@@ -154,6 +159,34 @@ export default class CourseService {
     } catch (e) {
       console.log(e.message);
       return null;
+    }
+  }
+
+  static async updateCourseTeacher(courseId, courseTeacher) {
+    try {
+      const existingCourse = await CourseDAO.getCourseByIDFromDB(courseId);
+      if (!existingCourse) {
+        return "No course found for this ID";
+      }
+
+      if (courseTeacher) {
+        existingCourse.courseTeacher = courseTeacher;
+
+        existingCourse.status = "assigned";
+      } else {
+        existingCourse.courseTeacher = courseTeacher;
+        existingCourse.status = "pending";
+      }
+
+      const updateResult = await CourseDAO.updateCourseInDB(existingCourse);
+
+      if (updateResult) {
+        return {};
+      } else {
+        return "Failed to update course details";
+      }
+    } catch (e) {
+      return e.message;
     }
   }
 }

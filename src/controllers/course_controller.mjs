@@ -156,6 +156,39 @@ export default class CourseController {
     }
   }
 
+  static async apiUpdateCourseTeacher(req, res, next) {
+    try {
+      const course_id = req.query._id;
+      if (!course_id) {
+        return res.status(400).json({
+          success: false,
+          data: {},
+          message: "course_id parameter is missing",
+        });
+      }
+
+      const { courseTeacher } = req.body;
+      const serviceResponse = await CourseService.updateCourseTeacher(
+        course_id,
+        courseTeacher
+      );
+
+      if (typeof serviceResponse === "string") {
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: serviceResponse,
+          message: "Course details updated successfully",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({ success: false, data: {}, message: e.message });
+    }
+  }
+
   static async apiGetAllCourseDetails(req, res, next) {
     try {
       const serviceResponse = await CourseService.getAllCourseForAdmin();
