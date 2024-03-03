@@ -27,7 +27,7 @@ router
     ParentController.apiParentForgotPassword
   );
 
-  router
+router
   .route(parentRoute + "/reset-password")
   .post(
     checkRequiredFieldsMiddleware(["new_password"]),
@@ -88,5 +88,9 @@ router
     checkTokenMiddleware,
     ParentController.apiUpdateParentAccountPasswordByAdmin
   );
+
+router
+  .route(parentRoute + "/validate")
+  .get(checkTokenMiddleware, ParentController.apiValidateUser);
 
 export default router;

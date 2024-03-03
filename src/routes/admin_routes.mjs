@@ -42,4 +42,8 @@ router
   .route(userRoute + "/details")
   .get(checkTokenMiddleware, AdminController.apiGetAdminAccountDetails);
 
+router
+  .route(userRoute + "/validate")
+  .get(checkTokenMiddleware, AdminController.apiValidateUser);
+
 export default router;

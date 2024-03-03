@@ -150,4 +150,25 @@ export default class AdminController {
   //     res.status(500).json({ success: false, data: {}, message: e.message });
   //   }
   // }
+
+  static async apiValidateUser(req, res, next) {
+    try {
+      const token = req.headers["authorization"];
+      const tokenDetails = await TokenUtil.getDataFromToken(token);
+
+      if (tokenDetails) {
+        res
+          .status(200)
+          .json({ success: true, data: {}, message: "User Authenticated" });
+      } else {
+        res.status(401).json({
+          success: false,
+          data: {},
+          message: "Invalid, expired or no token found",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({ success: false, data: {}, message: e.message });
+    }
+  }
 }

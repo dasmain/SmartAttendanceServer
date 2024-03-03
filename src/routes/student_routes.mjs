@@ -41,7 +41,7 @@ router
     checkStudentTokenMiddleware,
     StudentController.apiResetStudentAccountPassword
   );
-  
+
 router
   .route(studentRoute + "/validate-reset-pass-token")
   .get(
@@ -74,27 +74,28 @@ router
     StudentController.apiGetStudentAccountDetails
   );
 
-  router
+router
   .route(studentRoute + "/alldetails")
   .get(checkTokenMiddleware, StudentController.apiGetAllStudentAccountDetails);
 
-  router
+router
   .route(studentRoute + "/delete")
   .delete(checkTokenMiddleware, StudentController.apiDeleteStudentAccount);
 
-  router
+router
   .route(studentRoute + "/detailsbyid")
-  .get(
-    checkTokenMiddleware,
-    StudentController.apiGetStudentAccountDetailsByID
-  );
+  .get(checkTokenMiddleware, StudentController.apiGetStudentAccountDetailsByID);
 
-  router
+router
   .route(studentRoute + "/updatebyid/password")
   .post(
     checkRequiredFieldsMiddleware(["new_password"]),
     checkTokenMiddleware,
     StudentController.apiUpdateStudentAccountPasswordByAdmin
   );
+
+router
+  .route(studentRoute + "/validate")
+  .delete(checkTokenMiddleware, StudentController.apiValidateUser);
 
 export default router;

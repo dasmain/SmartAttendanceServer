@@ -94,4 +94,8 @@ router
     FacultyController.apiUpdateFacultyAccountPasswordByAdmin
   );
 
+  router
+  .route(facultyRoute + "/validate")
+  .get(checkTokenMiddleware, FacultyController.apiValidateUser);
+
 export default router;
