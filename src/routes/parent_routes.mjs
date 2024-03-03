@@ -91,6 +91,6 @@ router
 
 router
   .route(parentRoute + "/validate")
-  .get(checkTokenMiddleware, ParentController.apiValidateUser);
+  .get(checkParentTokenMiddleware, ParentController.apiValidateUser);
 
 export default router;

@@ -96,6 +96,6 @@ router
 
   router
   .route(facultyRoute + "/validate")
-  .get(checkTokenMiddleware, FacultyController.apiValidateUser);
+  .get(checkFacultyTokenMiddleware, FacultyController.apiValidateUser);
 
 export default router;

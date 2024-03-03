@@ -96,6 +96,6 @@ router
 
 router
   .route(studentRoute + "/validate")
-  .delete(checkTokenMiddleware, StudentController.apiValidateUser);
+  .delete(checkStudentTokenMiddleware, StudentController.apiValidateUser);
 
 export default router;
