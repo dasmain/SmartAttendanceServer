@@ -13,6 +13,7 @@ import FacultyTokenService from "./services/faculty_token_service.mjs";
 import CourseService from "./services/course_service.mjs";
 import CourseRequestsService from "./services/course_req_service.mjs";
 import LeaveService from "./services/leave_service.mjs";
+import AttendanceService from "./services/attendance_service.mjs";
 
 // Uncomment to enable https
 
@@ -59,6 +60,7 @@ MongoClient.connect(uri, {
     await CourseService.connectDatabase(client);
     await CourseRequestsService.connectDatabase(client);
     await LeaveService.connectDatabase(client);
+    await AttendanceService.connectDatabase(client);
     // const httpsServer = https.createServer(cred, app);
     // httpsServer.listen(port, () => {
     //   console.log(`https server listening`);
