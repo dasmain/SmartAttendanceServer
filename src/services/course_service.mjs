@@ -124,7 +124,6 @@ export default class CourseService {
 
       if (studentsEnrolled) {
         existingCourse.studentsEnrolled = studentsEnrolled;
-        D;
       }
 
       const updateResult = await CourseDAO.updateCourseInDB(existingCourse);
