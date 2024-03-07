@@ -291,7 +291,7 @@ return;
         existingFaculty.contactno = contactno;
       }
 
-      if (isStudentAdvisor) {
+      if (isStudentAdvisor || isStudentAdvisor == false || isStudentAdvisor == true) {
         existingFaculty.isStudentAdvisor = isStudentAdvisor;
       }
   
