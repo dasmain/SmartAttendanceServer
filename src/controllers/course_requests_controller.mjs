@@ -273,13 +273,14 @@ export default class CourseRequestController {
             course.courseId
           );
 
+          course.courseId = forCourseResponse;
+          
           if (forCourseResponse.courseTeacher != null) {
             const forFacultyResponse =
               await FacultyService.getFacultyAccountDetails(
                 forCourseResponse.courseTeacher
               );
 
-            course.courseId = forCourseResponse;
             course.courseId.courseTeacher = forFacultyResponse.name;
           }
         }
