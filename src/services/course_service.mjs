@@ -98,12 +98,7 @@ export default class CourseService {
       }
 
       if (courseName) {
-        const courseNameCheck = PatternUtil.checkAlphabeticName(courseName);
-        if (!courseNameCheck) {
-          return "Course name can not contain numbers and special characters";
-        } else {
           existingCourse.courseName = courseName;
-        }
       }
 
       if (courseCredHrs) {
