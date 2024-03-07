@@ -11,7 +11,6 @@ router
   .route(userRoute + "/create")
   .post(
     checkRequiredFieldsMiddleware(["email", "password"]),
-    checkTokenMiddleware,
     AdminController.apiCreateAdminAccount
   );
 
