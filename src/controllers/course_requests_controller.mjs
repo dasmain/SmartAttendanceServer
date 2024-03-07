@@ -1,5 +1,6 @@
 import CourseRequestsService from "../services/course_req_service.mjs";
 import CourseService from "../services/course_service.mjs";
+import FacultyService from "../services/faculty_service.mjs";
 import StudentService from "../services/student_service.mjs";
 import TokenUtil from "../utility/token_util.mjs";
 
@@ -272,7 +273,15 @@ export default class CourseRequestController {
             course.courseId
           );
 
-          course.courseId = forCourseResponse;
+          if (forCourseResponse.courseTeacher != null) {
+            const forFacultyResponse =
+              await FacultyService.getFacultyAccountDetails(
+                forCourseResponse.courseTeacher
+              );
+
+            course.courseId = forCourseResponse;
+            course.courseId.courseTeacher = forFacultyResponse.name;
+          }
         }
         if (course.studentId != null) {
           const forStudentResponse =
