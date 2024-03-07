@@ -187,29 +187,33 @@ export default class CourseRequestController {
             course.courseId
           );
 
+          if (typeof forCourseResponse === "string") {
+            serviceResponse.splice(i, 1);
+            i--;
+            continue;
+          }
+
           course.courseId = forCourseResponse;
         }
         if (course.studentId != null) {
           const forStudentResponse =
             await StudentService.getStudentAccountDetails(course.studentId);
 
+          if (typeof forStudentResponse === "string") {
+            serviceResponse.splice(i, 1);
+            i--;
+            continue;
+          }
+
           course.studentId = forStudentResponse;
         }
       }
 
-      if (typeof serviceResponse === "string") {
-        res.status(200).json({
-          success: false,
-          data: {},
-          message: serviceResponse,
-        });
-      } else {
-        res.status(200).json({
-          success: true,
-          data: serviceResponse,
-          message: "Course Request details fetched successfully",
-        });
-      }
+      res.status(200).json({
+        success: true,
+        data: serviceResponse,
+        message: "Course Request details fetched successfully",
+      });
     } catch (e) {
       res.status(500).json({
         success: false,
