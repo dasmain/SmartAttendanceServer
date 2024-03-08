@@ -1,3 +1,4 @@
+import CourseInfoService from "../services/course_info_service.mjs";
 import CourseRequestsService from "../services/course_req_service.mjs";
 import CourseService from "../services/course_service.mjs";
 import FacultyService from "../services/faculty_service.mjs";
@@ -133,6 +134,17 @@ export default class CourseRequestController {
             null,
             forCourseResponse.studentsEnrolled,
             null
+          );
+
+          const courseCredHrs = parseInt(forCourseResponse.courseCredHrs);
+          const total_hours = courseCredHrs * 16;
+
+          await CourseInfoService.addCourseInfo(
+            courseResponse.courseId,
+            courseResponse.studentId,
+            total_hours,
+            0,
+            0
           );
         }
       } else if (status == "removed") {
@@ -274,7 +286,7 @@ export default class CourseRequestController {
           );
 
           course.courseId = forCourseResponse;
-          
+
           if (forCourseResponse.courseTeacher != null) {
             const forFacultyResponse =
               await FacultyService.getFacultyAccountDetails(

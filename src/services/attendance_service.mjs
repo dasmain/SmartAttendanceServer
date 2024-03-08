@@ -1,4 +1,5 @@
 import AttendanceDAO from "../data/attendance_dao.mjs";
+import CourseInfoService from "./course_info_service.mjs";
 
 export default class AttendanceService {
   static async connectDatabase(client) {
@@ -9,7 +10,7 @@ export default class AttendanceService {
     }
   }
 
-  static async addAttendance(courseId, attendance) {
+  static async addAttendance(courseId, attendance, attendance_hours) {
     try {
       const date = new Date();
       date.setHours(0, 0, 0, 0);
@@ -28,6 +29,7 @@ export default class AttendanceService {
       const userDocument = {
         courseId: courseId,
         date: date,
+        attendance_hours: attendance_hours,
         attendance: attendance.map((student) => ({
           studentId: student.studentId,
           status: student.status,
@@ -37,6 +39,37 @@ export default class AttendanceService {
       };
 
       const addedUserId = await AttendanceDAO.addAttendanceToDB(userDocument);
+
+      for (let i = 0; i < attendance.length; i++) {
+        const courseinfo =
+          await CourseInfoService.getCourseInfoByCourseAndStudent(
+            courseId,
+            attendance[i].studentId
+          );
+
+        if (typeof courseinfo === "string") {
+          continue;
+        }
+
+        if (attendance[i].status == "present") {
+          const present_hours = courseinfo.present_hours + attendance_hours;
+          await CourseInfoService.updateCourseInfoDetails(
+            courseId,
+            attendance[i].studentId,
+            present_hours,
+            courseinfo.absent_hours
+          );
+        } else if (attendance[i].status == "absent") {
+          const absent_hours = courseinfo.absent_hours + attendance_hours;
+
+          await CourseInfoService.updateCourseInfoDetails(
+            courseId,
+            attendance[i].studentId,
+            courseinfo.present_hours,
+            absent_hours
+          );
+        }
+      }
 
       return { _id: addedUserId };
     } catch (e) {

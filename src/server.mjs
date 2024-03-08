@@ -8,6 +8,7 @@ import courseroutes from "./routes/course_routes.mjs";
 import coursereqroutes from "./routes/course_requests_routes.mjs";
 import leaveroutes from "./routes/leave_routes.mjs";
 import attendanceroutes from "./routes/attendance_routes.mjs";
+import courseinforoutes from "./routes/course_info_routes.mjs";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use("/api/v1", courseroutes);
 app.use("/api/v1", coursereqroutes);
 app.use("/api/v1", leaveroutes);
 app.use("/api/v1", attendanceroutes);
+app.use("/api/v1", courseinforoutes);
 
 app.use("*", (req, res) => res.status(404).json({ Error: "Not Found" }));
 

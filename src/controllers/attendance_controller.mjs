@@ -6,11 +6,12 @@ import StudentService from "../services/student_service.mjs";
 export default class AttendanceController {
   static async apiCreateAttendance(req, res, next) {
     try {
-      const { courseId, attendance } = req.body;
+      const { courseId, attendance, attendance_hours } = req.body;
 
       const serviceResponse = await AttendanceService.addAttendance(
         courseId,
-        attendance
+        attendance,
+        attendance_hours
       );
       if (typeof serviceResponse === "string") {
         res
