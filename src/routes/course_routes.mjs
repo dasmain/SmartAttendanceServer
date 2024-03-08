@@ -32,7 +32,7 @@ router
   .route(courseRoute + "/details")
   .get(checkTokenMiddleware, CourseController.apiGetCourseDetails);
   router
-  .route(courseRoute + "/detailsbyTeacher")
+  .route(courseRoute + "/teacher-details")
   .get(checkFacultyTokenMiddleware, CourseController.apiGetCourseDetails);
 
 router
