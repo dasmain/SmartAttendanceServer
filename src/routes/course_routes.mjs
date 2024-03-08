@@ -47,4 +47,11 @@ router
     CourseController.apiGetCourseDetailsByTeacher
   );
 
+router
+  .route(courseRoute + "/details-by-teacher-token")
+  .get(
+    checkFacultyTokenMiddleware,
+    CourseController.apiGetCourseDetailsByTeacherToken
+  );
+
 export default router;

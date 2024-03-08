@@ -119,6 +119,45 @@ export default class CourseController {
     }
   }
 
+  static async apiGetCourseDetailsByTeacherToken(req, res, next) {
+    try {
+      const token = req.headers["authorization"];
+      const tokenDetails = await TokenUtil.getFacultyDataFromToken(token);
+      const _id = tokenDetails.user_id.toString();
+
+      const serviceResponse = await CourseService.getCourseByTeacher(_id);
+
+      if (serviceResponse.courseTeacher != null) {
+        const forFacultyResponse =
+          await FacultyService.getFacultyAccountDetails(
+            serviceResponse.courseTeacher
+          );
+
+        serviceResponse.courseTeacher = forFacultyResponse;
+      }
+
+      if (typeof serviceResponse === "string") {
+        res.status(200).json({
+          success: false,
+          data: {},
+          message: serviceResponse,
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: serviceResponse,
+          message: "Course details fetched successfully",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        data: {},
+        message: e.message,
+      });
+    }
+  }
+
   static async apiUpdateCourseDetails(req, res, next) {
     try {
       const course_id = req.query._id;
