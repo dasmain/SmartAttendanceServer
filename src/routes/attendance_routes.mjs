@@ -18,6 +18,13 @@ router
 
 router
   .route(userRoute + "/details")
-  .get(checkStudentTokenMiddleware, AttendanceController.apiGetAttendanceDetails);
+  .get(
+    checkStudentTokenMiddleware,
+    AttendanceController.apiGetAttendanceDetails
+  );
+
+router
+  .route(userRoute + "/student-list")
+  .get(checkFacultyTokenMiddleware, AttendanceController.apiGetStudentList);
 
 export default router;

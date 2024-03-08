@@ -1,5 +1,6 @@
 import AttendanceService from "../services/attendance_service.mjs";
 import CourseService from "../services/course_service.mjs";
+import FacultyService from "../services/faculty_service.mjs";
 import StudentService from "../services/student_service.mjs";
 
 export default class AttendanceController {
@@ -73,6 +74,60 @@ export default class AttendanceController {
           success: true,
           data: serviceResponse,
           message: "Attendance details fetched successfully",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        data: {},
+        message: e.message,
+      });
+    }
+  }
+
+  static async apiGetStudentList(req, res, next) {
+    try {
+      const course_id = req.query._id;
+
+      if (!course_id) {
+        return res.status(400).json({
+          success: false,
+          data: {},
+          message: "course_id parameter is missing",
+        });
+      }
+
+      const serviceResponse = await CourseService.getCourseByID(course_id);
+      if (serviceResponse.studentsEnrolled != null) {
+        for (let i = 0; i < serviceResponse.studentsEnrolled.length; i++) {
+          const forFacultyResponse = await StudentService.getStudentByID(
+            serviceResponse.studentsEnrolled[i]
+          );
+
+          serviceResponse.studentsEnrolled[i] = forFacultyResponse;
+        }
+      }
+
+      if (serviceResponse.courseTeacher != null) {
+        const forFacultyResponse =
+          await FacultyService.getFacultyAccountDetails(
+            serviceResponse.courseTeacher
+          );
+
+        serviceResponse.courseTeacher = forFacultyResponse;
+      }
+
+      if (typeof serviceResponse === "string") {
+        res.status(200).json({
+          success: false,
+          data: {},
+          message: serviceResponse,
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: serviceResponse,
+          message: "Course details fetched successfully",
         });
       }
     } catch (e) {
