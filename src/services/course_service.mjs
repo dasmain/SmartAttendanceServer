@@ -183,4 +183,22 @@ export default class CourseService {
       return e.message;
     }
   }
+
+  static async getCoursesByStudent(studentId) {
+    try {
+      const existingCourses = await CourseDAO.getStudentCourse(studentId);
+      if (!existingCourses) {
+        return "No courses found for this student ID";
+      } else {
+        const filteredCourses = existingCourses.map(course => {
+          const { studentsEnrolled, ...courseWithoutStudents } = course;
+          return courseWithoutStudents;
+        });
+        return filteredCourses;
+      }
+    } catch (e) {
+      return e.message;
+    }
+  }
+  
 }

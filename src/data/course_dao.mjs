@@ -93,4 +93,15 @@ export default class CourseDAO {
       return null;
     }
   }
+
+  static async getStudentCourse(studentId) {
+    try {
+      const courses = await coursecon.find({ studentsEnrolled: { $elemMatch: { $eq: studentId } } }).toArray();
+      return courses;
+    } catch (e) {
+      console.error(`Unable to get courses for student: ${e}`);
+      return null;
+    }
+  }
+  
 }

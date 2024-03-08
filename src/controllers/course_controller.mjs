@@ -1,5 +1,6 @@
 import CourseService from "../services/course_service.mjs";
 import FacultyService from "../services/faculty_service.mjs";
+import PatternUtil from "../utility/pattern_util.mjs";
 import TokenUtil from "../utility/token_util.mjs";
 
 export default class CourseController {
@@ -10,7 +11,7 @@ export default class CourseController {
       const serviceResponse = await CourseService.addCourse(
         courseCode,
         courseName,
-        courseCredHrs,
+        courseCredHrs
       );
 
       if (typeof serviceResponse === "string") {
@@ -86,7 +87,9 @@ export default class CourseController {
         });
       }
 
-      const serviceResponse = await CourseService.getCourseByTeacher(courseTeacher);
+      const serviceResponse = await CourseService.getCourseByTeacher(
+        courseTeacher
+      );
 
       if (serviceResponse.courseTeacher != null) {
         const forFacultyResponse =
@@ -169,7 +172,13 @@ export default class CourseController {
         });
       }
 
-      const { courseCode, courseName, courseCredHrs, studentsEnrolled, courseTeacher } = req.body;
+      const {
+        courseCode,
+        courseName,
+        courseCredHrs,
+        studentsEnrolled,
+        courseTeacher,
+      } = req.body;
       const serviceResponse = await CourseService.updateCourseDetails(
         course_id,
         courseCode,
@@ -290,6 +299,48 @@ export default class CourseController {
       }
     } catch (e) {
       res.status(500).json({ success: false, data: {}, message: e.message });
+    }
+  }
+
+  static async apiGetCourseDetailsByStudent(req, res, next) {
+    try {
+      
+      const token = req.headers["authorization"];
+      const tokenDetails = await TokenUtil.getStudentDataFromToken(token);
+      const studentId = tokenDetails.user_id.toString();
+
+      const serviceResponse = await CourseService.getCoursesByStudent(
+        studentId
+      );
+
+      for (let i = 0; i < serviceResponse.length; i++) {
+        const course = serviceResponse[i];
+        if (course.courseTeacher != null) {
+          const forFacultyResponse =
+            await FacultyService.getFacultyAccountDetails(course.courseTeacher);
+          course.courseTeacher = forFacultyResponse;
+        }
+      }
+
+      if (typeof serviceResponse === "string") {
+        res.status(200).json({
+          success: false,
+          data: {},
+          message: serviceResponse,
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: serviceResponse,
+          message: "Course details fetched successfully",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        data: {},
+        message: e.message,
+      });
     }
   }
 }

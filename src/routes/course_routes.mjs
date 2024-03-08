@@ -3,6 +3,7 @@ import checkRequiredFieldsMiddleware from "../middleware/check_required_fields_m
 import checkTokenMiddleware from "../middleware/check_token_middleware.mjs";
 import checkFacultyTokenMiddleware from "../middleware/check_faculty_token_middleware.mjs";
 import CourseController from "../controllers/course_controller.mjs";
+import checkStudentTokenMiddleware from "../middleware/check_student_token_middleware.mjs";
 
 const router = express.Router();
 
@@ -55,6 +56,13 @@ router
   .get(
     checkFacultyTokenMiddleware,
     CourseController.apiGetCourseDetailsByTeacherToken
+  );
+
+  router
+  .route(courseRoute + "/student-courses")
+  .get(
+    checkStudentTokenMiddleware,
+    CourseController.apiGetCourseDetailsByStudent
   );
 
 export default router;
