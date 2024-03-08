@@ -31,6 +31,9 @@ router
 router
   .route(courseRoute + "/details")
   .get(checkTokenMiddleware, CourseController.apiGetCourseDetails);
+  router
+  .route(courseRoute + "/detailsbyTeacher")
+  .get(checkFacultyTokenMiddleware, CourseController.apiGetCourseDetails);
 
 router
   .route(courseRoute + "/alldetails")
