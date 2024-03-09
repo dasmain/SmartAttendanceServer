@@ -10,7 +10,7 @@ export default class AttendanceService {
     }
   }
 
-  static async addAttendance(courseId, attendance, attendance_hours) {
+  static async addAttendance(courseId, attendance, attendance_hours, topics) {
     try {
       const date = new Date();
       date.setHours(0, 0, 0, 0);
@@ -30,6 +30,7 @@ export default class AttendanceService {
         courseId: courseId,
         date: date,
         attendance_hours: attendance_hours,
+        topics: topics,
         attendance: attendance.map((student) => ({
           studentId: student.studentId,
           status: student.status,
