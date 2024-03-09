@@ -122,11 +122,14 @@ export default class CourseInfoController {
           }
         });
 
+        const hours = attendance_hours;
+
         serviceResponse.attendance.push({
           date,
           topics,
           present_hours,
           absent_hours,
+          hours,
         });
       });
 
