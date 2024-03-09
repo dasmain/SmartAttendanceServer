@@ -51,7 +51,7 @@ export default class CourseDAO {
 
   static async getCourseByCoureTeacherFromDB(courseTeacher) {
     try {
-      const course = await coursecon.findOne({ courseTeacher: courseTeacher });
+      const course = await coursecon.find({ courseTeacher: courseTeacher }).toArray();
       return course;
     } catch (e) {
       console.error(`Unable to get faculty by course code: ${e}`);

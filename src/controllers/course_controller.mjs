@@ -130,13 +130,13 @@ export default class CourseController {
 
       const serviceResponse = await CourseService.getCourseByTeacher(_id);
 
-      if (serviceResponse.courseTeacher != null) {
-        const forFacultyResponse =
-          await FacultyService.getFacultyAccountDetails(
-            serviceResponse.courseTeacher
-          );
-
-        serviceResponse.courseTeacher = forFacultyResponse;
+      for (let i = 0; i < serviceResponse.length; i++) {
+        const course = serviceResponse[i];
+        if (course.courseTeacher != null) {
+          const forFacultyResponse =
+            await FacultyService.getFacultyAccountDetails(course.courseTeacher);
+          course.courseTeacher = forFacultyResponse;
+        }
       }
 
       if (typeof serviceResponse === "string") {
