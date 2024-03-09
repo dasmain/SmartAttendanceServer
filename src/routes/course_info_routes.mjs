@@ -24,4 +24,18 @@ router
     CourseInfoController.apiGetCourseInfoDetails
   );
 
+router
+  .route(userRoute + "/details-by-course")
+  .get(
+    checkStudentTokenMiddleware,
+    CourseInfoController.apiGetCourseInfoDetailsByCourse
+  );
+
+router
+  .route(userRoute + "/details-by-student")
+  .get(
+    checkStudentTokenMiddleware,
+    CourseInfoController.apiGetCourseInfoDetailsByStudent
+  );
+
 export default router;

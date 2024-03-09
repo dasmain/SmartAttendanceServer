@@ -46,8 +46,86 @@ export default class CourseInfoController {
         });
       }
 
-      const serviceResponse = await CourseInfoService.getCourseInfoByCourseAndStudent(
-        course_id, student_id
+      const serviceResponse =
+        await CourseInfoService.getCourseInfoByCourseAndStudent(
+          course_id,
+          student_id
+        );
+
+      if (typeof serviceResponse === "string") {
+        res.status(200).json({
+          success: false,
+          data: {},
+          message: serviceResponse,
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: serviceResponse,
+          message: "Attendance details fetched successfully",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        data: {},
+        message: e.message,
+      });
+    }
+  }
+
+  static async apiGetCourseInfoDetailsByCourse(req, res, next) {
+    try {
+      const course_id = req.query._id;
+
+      if (!course_id) {
+        return res.status(400).json({
+          success: false,
+          data: {},
+          message: "_id parameter is missing",
+        });
+      }
+
+      const serviceResponse = await CourseInfoService.getCourseInfoByCourse(
+        course_id
+      );
+
+      if (typeof serviceResponse === "string") {
+        res.status(200).json({
+          success: false,
+          data: {},
+          message: serviceResponse,
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: serviceResponse,
+          message: "Attendance details fetched successfully",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        data: {},
+        message: e.message,
+      });
+    }
+  }
+
+  static async apiGetCourseInfoDetailsByStudent(req, res, next) {
+    try {
+      const student_id = req.query._id;
+
+      if (!student_id) {
+        return res.status(400).json({
+          success: false,
+          data: {},
+          message: "_id parameter is missing",
+        });
+      }
+
+      const serviceResponse = await CourseInfoService.getCourseInfoByStudent(
+        student_id
       );
 
       if (typeof serviceResponse === "string") {
