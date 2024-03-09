@@ -88,26 +88,46 @@ export default class CourseInfoController {
         });
       }
 
-      const serviceResponse = await CourseInfoService.getCourseInfoByCourse(
-        course_id
-      );
+      const token = req.headers["authorization"];
+      const tokenDetails = await TokenUtil.getStudentDataFromToken(token);
+      const student_id = tokenDetails.user_id.toString();
+
+      const serviceResponse =
+        await CourseInfoService.getCourseInfoByCourseAndStudent(
+          course_id,
+          student_id
+        );
 
       const attendanceResponse = await AttendanceService.getAttendanceByCourse(
         course_id
       );
 
-      attendanceResponse.forEach((attendance) => {
-        const { date, topics } = attendance;
-        const courseIndex = serviceResponse.findIndex(
-          (course) => course.courseId === attendance.courseId
-        );
+      attendanceResponse.forEach((attendance1) => {
+        const { date, topics, attendance_hours, attendance } = attendance1;
 
-        if (courseIndex !== -1) {
-          if (!serviceResponse[courseIndex].attendance) {
-            serviceResponse[courseIndex].attendance = [];
-          }
-          serviceResponse[courseIndex].attendance.push({ date, topics });
+        let present_hours = 0;
+        let absent_hours = 0;
+
+        if (!serviceResponse.attendance) {
+          serviceResponse.attendance = [];
         }
+
+        attendance.forEach((att) => {
+          if (att.studentId == student_id) {
+            if (att.status == "present") {
+              present_hours += attendance_hours;
+            } else if (att.status == "absent") {
+              absent_hours += attendance_hours;
+            }
+          }
+        });
+
+        serviceResponse.attendance.push({
+          date,
+          topics,
+          present_hours,
+          absent_hours,
+        });
       });
 
       for (let i = 0; i < serviceResponse.length; i++) {
