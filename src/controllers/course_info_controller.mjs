@@ -132,31 +132,21 @@ export default class CourseInfoController {
           hours,
         });
       });
-
-      for (let i = 0; i < serviceResponse.length; i++) {
-        const course = serviceResponse[i];
-        if (course.courseId != null) {
+        if (serviceResponse.courseId != null) {
           const forCourseResponse = await CourseService.getCourseByID(
-            course.courseId
+            serviceResponse.courseId
           );
 
-          if (typeof forCourseResponse === "string") {
-            serviceResponse.splice(i, 1);
-            i--;
-            continue;
-          }
+          serviceResponse.courseId = forCourseResponse;
 
-          course.courseId = forCourseResponse;
-
-          if (course.courseId && course.courseId.courseTeacher != null) {
+          if (serviceResponse.courseId && serviceResponse.courseId.courseTeacher != null) {
             const forFacultyResponse =
               await FacultyService.getFacultyAccountDetails(
-                course.courseId.courseTeacher
+                serviceResponse.courseId.courseTeacher
               );
-            course.courseId.courseTeacher = forFacultyResponse.name;
+              serviceResponse.courseId.courseTeacher = forFacultyResponse.name;
           }
         }
-      }
 
       if (typeof serviceResponse === "string") {
         res.status(200).json({
