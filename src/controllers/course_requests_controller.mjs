@@ -136,13 +136,10 @@ export default class CourseRequestController {
             null
           );
 
-          const courseCredHrs = parseInt(forCourseResponse.courseCredHrs);
-          const total_hours = courseCredHrs * 16;
-
           await CourseInfoService.addCourseInfo(
             courseResponse.courseId,
             courseResponse.studentId,
-            total_hours,
+            0,
             0,
             0
           );

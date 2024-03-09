@@ -96,7 +96,7 @@ export default class CourseInfoService {
   static async updateCourseInfoDetails(
     courseId,
     studentId,
-    //total_hours,
+    total_hours,
     present_hours,
     absent_hours
   ) {
@@ -118,9 +118,9 @@ export default class CourseInfoService {
       //   existingCourse.studentId = studentId;
       // }
 
-      // if (total_hours) {
-      //   existingCourse.total_hours = total_hours;
-      // }
+      if (total_hours) {
+        existingCourse.total_hours = total_hours;
+      }
 
       if (present_hours) {
         existingCourse.present_hours = present_hours;

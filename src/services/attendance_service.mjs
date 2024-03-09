@@ -54,18 +54,22 @@ export default class AttendanceService {
 
         if (attendance[i].status == "present") {
           const present_hours = courseinfo.present_hours + attendance_hours;
+          const total_hours = present_hours + courseinfo.absent_hours;
           await CourseInfoService.updateCourseInfoDetails(
             courseId,
             attendance[i].studentId,
+            total_hours,
             present_hours,
             courseinfo.absent_hours
           );
         } else if (attendance[i].status == "absent") {
           const absent_hours = courseinfo.absent_hours + attendance_hours;
+          const total_hours = courseinfo.present_hours + absent_hours;
 
           await CourseInfoService.updateCourseInfoDetails(
             courseId,
             attendance[i].studentId,
+            total_hours,
             courseinfo.present_hours,
             absent_hours
           );
