@@ -132,21 +132,23 @@ export default class AttendanceService {
 
           if (attendance[i].status == "present") {
             const new_present_hours = present_hours + attendance_hours;
+            const new_total_hours = new_present_hours + courseinfo.absent_hours;
 
             await CourseInfoService.updateCourseInfoDetails(
               courseId,
               attendance[i].studentId,
-              courseinfo.total_hours,
+              new_total_hours,
               new_present_hours,
               courseinfo.absent_hours
             );
           } else if (attendance[i].status == "absent") {
             const new_absent_hours = courseinfo.absent_hours + attendance_hours;
+            const new_total_hours = present_hours + new_absent_hours;
 
             await CourseInfoService.updateCourseInfoDetails(
               courseId,
               attendance[i].studentId,
-              courseinfo.total_hours,
+              new_total_hours,
               present_hours,
               new_absent_hours
             );
@@ -157,21 +159,23 @@ export default class AttendanceService {
           if (attendance[i].status == "present") {
             const new_present_hours =
               courseinfo.present_hours + attendance_hours;
+            const new_total_hours = new_present_hours + absent_hours;
 
             await CourseInfoService.updateCourseInfoDetails(
               courseId,
               attendance[i].studentId,
-              courseinfo.total_hours,
+              new_total_hours,
               new_present_hours,
               absent_hours
             );
           } else if (attendance[i].status == "absent") {
             const new_absent_hours = absent_hours + attendance_hours;
+            const new_total_hours = courseinfo.present_hours + new_absent_hours;
 
             await CourseInfoService.updateCourseInfoDetails(
               courseId,
               attendance[i].studentId,
-              courseinfo.total_hours,
+              new_total_hours,
               courseinfo.present_hours,
               new_absent_hours
             );
