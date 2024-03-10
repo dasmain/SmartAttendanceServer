@@ -8,7 +8,9 @@ export default class AttendanceDAO {
       return;
     }
     try {
-      attendancecon = conn.db(databaseConfig.database.dbName).collection("attendance");
+      attendancecon = conn
+        .db(databaseConfig.database.dbName)
+        .collection("attendance");
     } catch (e) {
       console.error(`Unable to establish a collection handle: ${e}`);
     }
@@ -47,6 +49,21 @@ export default class AttendanceDAO {
       return user;
     } catch (e) {
       console.error(`Unable to get attendance by course and date: ${e}`);
+      return null;
+    }
+  }
+
+  static async updateAttendance(att) {
+    try {
+      const updateResult = await attendancecon.updateOne(
+        { courseId: att.courseId, date: att.date },
+        {
+          $set: att,
+        }
+      );
+      return true;
+    } catch (e) {
+      console.error(`Unable to update attendance: ${e}`);
       return null;
     }
   }

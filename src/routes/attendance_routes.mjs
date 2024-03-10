@@ -27,4 +27,11 @@ router
   .route(userRoute + "/student-list")
   .get(checkFacultyTokenMiddleware, AttendanceController.apiGetStudentList);
 
+  router
+  .route(userRoute + "/update")
+  .post(
+    checkFacultyTokenMiddleware,
+    AttendanceController.apiUpdateAttendance
+  );
+
 export default router;

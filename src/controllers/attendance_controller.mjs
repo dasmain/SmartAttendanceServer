@@ -140,4 +140,30 @@ export default class AttendanceController {
       });
     }
   }
+
+  static async apiUpdateAttendance(req, res, next) {
+    try {
+      const { courseId, attendance, attendance_hours, topics } = req.body;
+
+      const serviceResponse = await AttendanceService.updateAttendanceDetails(
+        courseId,
+        attendance,
+        attendance_hours,
+        topics
+      );
+      if (typeof serviceResponse === "string") {
+        res
+          .status(200)
+          .json({ success: false, data: {}, message: serviceResponse });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: serviceResponse,
+          message: "Attendance updated successfully",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({ success: false, data: {}, message: e.message });
+    }
+  }
 }
