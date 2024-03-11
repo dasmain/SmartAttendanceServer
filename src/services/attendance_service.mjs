@@ -97,6 +97,21 @@ export default class AttendanceService {
     }
   }
 
+  static async getAttendanceByCourseAndDate(courseId, date) {
+    try {
+      const existingCourse = await AttendanceDAO.getAttendanceByCourseAndDate(
+        courseId, date
+      );
+      if (!existingCourse) {
+        return "No attendance found for this courseId";
+      } else {
+        return existingCourse;
+      }
+    } catch (e) {
+      return e.message;
+    }
+  }
+
   static async updateAttendanceDetails(
     courseId,
     attendance,

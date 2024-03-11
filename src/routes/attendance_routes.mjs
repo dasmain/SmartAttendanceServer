@@ -23,6 +23,13 @@ router
     AttendanceController.apiGetAttendanceDetails
   );
 
+  router
+  .route(userRoute + "/details-by-date")
+  .get(
+    checkStudentTokenMiddleware,
+    AttendanceController.apiGetAttendanceDetailsForDate
+  );
+
 router
   .route(userRoute + "/student-list")
   .get(checkFacultyTokenMiddleware, AttendanceController.apiGetStudentList);
