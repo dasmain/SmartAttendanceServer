@@ -104,7 +104,7 @@ export default class AttendanceService {
     topics
   ) {
     const date = new Date();
-    date.setHours(0, 0, 0, 0);
+    date.setUTCHours(0, 0, 0, 0);
 
     try {
       const existingCourse = await AttendanceDAO.getAttendanceByCourseAndDate(
