@@ -13,7 +13,7 @@ export default class AttendanceService {
   static async addAttendance(courseId, attendance, attendance_hours, topics) {
     try {
       const date = new Date();
-      date.setHours(0, 0, 0, 0);
+      date.setUTCHours(0, 0, 0, 0);
 
       const existingUser = await AttendanceDAO.getAttendanceByCourseAndDate(
         courseId,
