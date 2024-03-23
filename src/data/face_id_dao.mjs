@@ -1,0 +1,40 @@
+import databaseConfig from "../config/database_config.mjs";
+
+let faceidcon;
+
+export default class FaceIdDAO {
+  static async injectDB(conn) {
+    if (faceidcon) {
+      return;
+    }
+    try {
+      faceidcon = conn.db(databaseConfig.database.dbName).collection("face_id");
+    } catch (e) {
+      console.error(`Unable to establish a collection handle: ${e}`);
+    }
+  }
+
+  static async addFaceIdToDB(face) {
+    try {
+      const insertionResult = await faceidcon.insertOne(face);
+      if (insertionResult && insertionResult.insertedId) {
+        return insertionResult.insertedId;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      console.error(`Unable to add Face ID: ${e}`);
+      return null;
+    }
+  }
+
+  static async getFaceIdByStudentIdFromDB(studentId) {
+    try {
+      const user = await faceidcon.findOne({ studentId: studentId });
+      return user;
+    } catch (e) {
+      console.error(`Unable to get FaceId by ID: ${e}`);
+      return null;
+    }
+  }
+}
