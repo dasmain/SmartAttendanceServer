@@ -30,8 +30,8 @@ export default class FaceIdDAO {
 
   static async getFaceIdByStudentIdFromDB(studentId) {
     try {
-      const user = await faceidcon.findOne({ studentId: studentId });
-      return user;
+      const face = await faceidcon.findOne({ studentId: studentId });
+      return face;
     } catch (e) {
       console.error(`Unable to get FaceId by ID: ${e}`);
       return null;
