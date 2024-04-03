@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import databaseConfig from "../config/database_config.mjs";
 
 let faceidcon;
@@ -31,6 +32,16 @@ export default class FaceIdDAO {
   static async getFaceIdByStudentIdFromDB(studentId) {
     try {
       const face = await faceidcon.findOne({ studentId: studentId });
+      return face;
+    } catch (e) {
+      console.error(`Unable to get FaceId by ID: ${e}`);
+      return null;
+    }
+  }
+
+  static async getFaceIdById(id) {
+    try {
+      const face = await faceidcon.findOne({ _id: new ObjectId(id) });
       return face;
     } catch (e) {
       console.error(`Unable to get FaceId by ID: ${e}`);

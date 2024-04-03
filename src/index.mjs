@@ -15,6 +15,7 @@ import CourseRequestsService from "./services/course_req_service.mjs";
 import LeaveService from "./services/leave_service.mjs";
 import AttendanceService from "./services/attendance_service.mjs";
 import CourseInfoService from "./services/course_info_service.mjs";
+import FaceIdService from "./services/face_id_service.mjs";
 
 // Uncomment to enable https
 
@@ -63,6 +64,7 @@ MongoClient.connect(uri, {
     await LeaveService.connectDatabase(client);
     await AttendanceService.connectDatabase(client);
     await CourseInfoService.connectDatabase(client);
+    await FaceIdService.connectDatabase(client);
     // const httpsServer = https.createServer(cred, app);
     // httpsServer.listen(port, () => {
     //   console.log(`https server listening`);
