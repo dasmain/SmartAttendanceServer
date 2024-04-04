@@ -7,13 +7,12 @@ const router = express.Router();
 
 const faceRoute = "/face-id";
 //api routes
-router
-  .route(faceRoute + "/create")
-  .post(
-    checkRequiredFieldsMiddleware(["studentId", "faceId"]),
-    checkTokenMiddleware,
-    FaceIdController.apiCreateFaceId
-  );
+// router
+//   .route(faceRoute + "/create")
+//   .post(
+//     checkTokenMiddleware,
+//     FaceIdController.apiCreateFaceId
+//   );
 
 router
   .route(faceRoute + "/details-by-student")
