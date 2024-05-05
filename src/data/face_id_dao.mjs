@@ -39,6 +39,16 @@ export default class FaceIdDAO {
     }
   }
 
+  static async getAllFaceIdFromDB() {
+    try {
+      const face = await faceidcon.find().toArray();
+      return face;
+    } catch (e) {
+      console.error(`Unable to get FaceId: ${e}`);
+      return null;
+    }
+  }
+
   static async getFaceIdById(id) {
     try {
       const face = await faceidcon.findOne({ _id: new ObjectId(id) });

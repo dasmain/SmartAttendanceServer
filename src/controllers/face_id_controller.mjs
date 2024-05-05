@@ -82,4 +82,31 @@ export default class FaceIdController {
       });
     }
   }
+
+  static async apiGetAllFaceIdDetails(req, res, next) {
+    try {
+
+      const serviceResponse = await FaceIdService.getAllFaceId();
+
+      if (typeof serviceResponse === "string") {
+        res.status(200).json({
+          success: false,
+          data: {},
+          message: serviceResponse,
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: serviceResponse,
+          message: "Course details fetched successfully",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        data: {},
+        message: e.message,
+      });
+    }
+  }
 }

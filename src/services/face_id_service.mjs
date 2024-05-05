@@ -73,4 +73,14 @@ export default class FaceIdService {
       return null;
     }
   }
+
+  static async getAllFaceId() {
+    try {
+      const faceId = await FaceIdDAO.getAllFaceIdFromDB();
+      return faceId;
+    } catch (e) {
+      console.log(e.message);
+      return null;
+    }
+  }
 }

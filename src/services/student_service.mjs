@@ -1,3 +1,4 @@
+import FaceIdDAO from "../data/face_id_dao.mjs";
 import StudentDAO from "../data/student_dao.mjs";
 import AuthUtil from "../utility/auth_util.mjs";
 import PatternUtil from "../utility/pattern_util.mjs";
@@ -334,16 +335,26 @@ export default class StudentService {
 
   static async getAllStudentForAdmin() {
     try {
-      const existingStudent = await StudentDAO.getAllStudent();
+      const [existingStudent, existingFaceIds] = await Promise.all([
+        StudentDAO.getAllStudent(),
+        FaceIdDAO.getAllFaceIdFromDB(),
+      ]);
+  
       if (!existingStudent) {
         return "No student available.";
       } else {
+        existingStudent.forEach(student => {
+          const matchingFaceId = existingFaceIds.find(faceId => faceId.studentId === student._id.toString());
+          student.registered_face = !!matchingFaceId;
+        });
+        
         return existingStudent;
       }
     } catch (e) {
       return e.message;
     }
   }
+  
 
   static async deleteStudent(_id) {
     try {
