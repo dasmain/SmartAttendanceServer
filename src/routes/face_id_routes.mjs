@@ -18,4 +18,8 @@ router
   .route(faceRoute + "/details-by-student")
   .get(checkTokenMiddleware, FaceIdController.apiGetFaceIdDetails);
 
+router
+  .route(faceRoute + "/delete")
+  .delete(checkTokenMiddleware, FaceIdController.apiDeleteFaceId);
+
 export default router;

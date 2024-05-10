@@ -83,9 +83,46 @@ export default class FaceIdController {
     }
   }
 
+  static async apiDeleteFaceId(req, res, next) {
+    try {
+      const student_id = req.query._id;
+
+      if (!student_id) {
+        return res.status(400).json({
+          success: false,
+          data: {},
+          message: "student_id parameter is missing",
+        });
+      }
+
+      const serviceResponse = await FaceIdService.deleteFaceIdByStudentId(
+        student_id
+      );
+
+      if (typeof serviceResponse === "string") {
+        res.status(200).json({
+          success: false,
+          data: {},
+          message: serviceResponse,
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          data: serviceResponse,
+          message: "FaceId deleted successfully",
+        });
+      }
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        data: {},
+        message: e.message,
+      });
+    }
+  }
+
   static async apiGetAllFaceIdDetails(req, res, next) {
     try {
-
       const serviceResponse = await FaceIdService.getAllFaceId();
 
       if (typeof serviceResponse === "string") {
