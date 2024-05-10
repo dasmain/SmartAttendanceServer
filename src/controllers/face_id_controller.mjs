@@ -91,7 +91,7 @@ export default class FaceIdController {
         return res.status(400).json({
           success: false,
           data: {},
-          message: "student_id parameter is missing",
+          message: "_id parameter is missing",
         });
       }
 
