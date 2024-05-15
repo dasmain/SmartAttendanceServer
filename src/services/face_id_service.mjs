@@ -74,6 +74,16 @@ export default class FaceIdService {
     }
   }
 
+  static async deleteFaceIdByStudentId(studentId) {
+    try {
+      const faceId = await FaceIdDAO.deleteFaceId(studentId);
+      return faceId;
+    } catch (e) {
+      console.log(e.message);
+      return null;
+    }
+  }
+
   static async getAllFaceId() {
     try {
       const faceId = await FaceIdDAO.getAllFaceIdFromDB();

@@ -58,4 +58,14 @@ export default class FaceIdDAO {
       return null;
     }
   }
+
+  static async deleteFaceId(studentId) {
+    try {      
+      const face = await faceidcon.deleteOne({ studentId: studentId });
+      return true;
+    } catch (e) {
+      console.error(`Unable to get faceId: ${e}`);
+      return null;
+    }
+  }
 }
