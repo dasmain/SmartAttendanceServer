@@ -26,7 +26,7 @@ router
   router
   .route(userRoute + "/details-by-date")
   .get(
-    checkStudentTokenMiddleware,
+    checkFacultyTokenMiddleware,
     AttendanceController.apiGetAttendanceDetailsForDate
   );
 
