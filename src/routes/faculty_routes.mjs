@@ -76,7 +76,7 @@ router
 
 router
   .route(facultyRoute + "/alldetails")
-  .get(checkTokenMiddleware, FacultyController.apiGetAllFacultyAccountDetails);
+  .get(FacultyController.apiGetAllFacultyAccountDetails);
 
 router
   .route(facultyRoute + "/delete")
