@@ -124,7 +124,7 @@ export default class CourseRequestController {
         }
 
         if (
-          !forCourseResponse.studentsEnrolled.includes(courseResponse.studentId)
+          forCourseResponse.studentsEnrolled.includes(courseResponse.studentId)
         ) {
           forCourseResponse.studentsEnrolled.push(courseResponse.studentId);
           await CourseService.updateCourseDetails(
