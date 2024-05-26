@@ -6,6 +6,7 @@ config();
 const databaseConfig = {
   // Database configuration
   database: {
+    uri: process.env.MONGO_DB_URI,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dbName: process.env.DB_NAME,

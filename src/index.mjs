@@ -37,12 +37,12 @@ const port = appConfig.server.port;
 // const username = encodeURIComponent(databaseConfig.database.username);
 // const password = encodeURIComponent(databaseConfig.database.password);
 
-const uri = `mongodb://${databaseConfig.database.host}:${databaseConfig.database.port}/${databaseConfig.database.dbName}`;
+//const uri = `mongodb://${databaseConfig.database.host}:${databaseConfig.database.port}/${databaseConfig.database.dbName}`;
 
 //const uri = `mongodb://127.0.0.1:27017/sadb`
 //${username}:${password}@
 
-MongoClient.connect(uri, {
+MongoClient.connect(databaseConfig.database.uri, {
   maxPoolSize: 50,
   wtimeoutMS: 2500,
 })
