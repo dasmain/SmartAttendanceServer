@@ -16,7 +16,7 @@ const faceRoute = "/face-id";
 
 router
   .route(faceRoute + "/details-by-student")
-  .get(checkTokenMiddleware, FaceIdController.apiGetFaceIdDetails);
+  .get(checkTokenMiddleware, FaceIdController.apiGetAllFaceIdDetails);
 
 router
   .route(faceRoute + "/delete")

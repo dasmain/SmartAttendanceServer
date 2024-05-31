@@ -43,7 +43,7 @@ export default class AdminController {
         res.status(200).json({
           success: true,
           data: serviceResponse,
-          message: "User signed in successfully",
+          message: "Admin signed in successfully",
         });
       }
     } catch (e) {
@@ -66,7 +66,7 @@ export default class AdminController {
         res.status(200).json({
           success: true,
           data: {},
-          message: "User signed out successfully",
+          message: "Admin signed out successfully",
         });
       }
     } catch (e) {
