@@ -1,15 +1,16 @@
 {
   "name": "server-boiler-plate",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Smart Attendance FYP Server",
+  "main": "src/index.mjs",
   "type": "module",
   "scripts": {
     "start": "node src/index.mjs",
+    "dev": "nodemon src/index.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "diyan",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
