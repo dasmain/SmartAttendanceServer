@@ -27,6 +27,10 @@ app.use("/api/v1", attendanceroutes);
 app.use("/api/v1", courseinforoutes);
 app.use("/api/v1", faceroutes);
 
+app.get("/", (req, res) => {
+    res.send("Welcome to the Smart Attendance Server");
+  });
+
 app.use("*", (req, res) => res.status(404).json({ Error: "Not Found" }));
 
 export default app;
