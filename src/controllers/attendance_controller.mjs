@@ -90,8 +90,10 @@ export default class AttendanceController {
   static async apiGetAttendanceDetailsForDate(req, res, next) {
     try {
       const course_id = req.query._id;
+      const pstOffset = 5 * 60 * 60 * 1000;
       const date = new Date();
-      date.setUTCHours(0, 0, 0, 0);
+      const newDate = new Date(date.getTime() + pstOffset);
+      newDate.setUTCHours(0, 0, 0, 0);
 
       if (!course_id) {
         return res.status(400).json({
@@ -102,7 +104,10 @@ export default class AttendanceController {
       }
 
       const serviceResponse =
-        await AttendanceService.getAttendanceByCourseAndDate(course_id, date);
+        await AttendanceService.getAttendanceByCourseAndDate(
+          course_id,
+          newDate
+        );
 
       if (typeof serviceResponse != "string") {
         for (let i = 0; i < serviceResponse.length; i++) {
