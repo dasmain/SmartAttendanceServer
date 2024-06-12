@@ -2,6 +2,7 @@ import AttendanceService from "../services/attendance_service.mjs";
 import CourseInfoService from "../services/course_info_service.mjs";
 import CourseService from "../services/course_service.mjs";
 import FacultyService from "../services/faculty_service.mjs";
+import LeaveService from "../services/leave_service.mjs";
 import ParentService from "../services/parent_service.mjs";
 import PatternUtil from "../utility/pattern_util.mjs";
 import TokenUtil from "../utility/token_util.mjs";
@@ -132,21 +133,24 @@ export default class CourseInfoController {
           hours,
         });
       });
-        if (serviceResponse.courseId != null) {
-          const forCourseResponse = await CourseService.getCourseByID(
-            serviceResponse.courseId
-          );
+      if (serviceResponse.courseId != null) {
+        const forCourseResponse = await CourseService.getCourseByID(
+          serviceResponse.courseId
+        );
 
-          serviceResponse.courseId = forCourseResponse;
+        serviceResponse.courseId = forCourseResponse;
 
-          if (serviceResponse.courseId && serviceResponse.courseId.courseTeacher != null) {
-            const forFacultyResponse =
-              await FacultyService.getFacultyAccountDetails(
-                serviceResponse.courseId.courseTeacher
-              );
-              serviceResponse.courseId.courseTeacher = forFacultyResponse.name;
-          }
+        if (
+          serviceResponse.courseId &&
+          serviceResponse.courseId.courseTeacher != null
+        ) {
+          const forFacultyResponse =
+            await FacultyService.getFacultyAccountDetails(
+              serviceResponse.courseId.courseTeacher
+            );
+          serviceResponse.courseId.courseTeacher = forFacultyResponse.name;
         }
+      }
 
       if (typeof serviceResponse === "string") {
         res.status(200).json({
@@ -175,57 +179,63 @@ export default class CourseInfoController {
       const token = req.headers["authorization"];
       const tokenDetails = await TokenUtil.getStudentDataFromToken(token);
       const student_id = tokenDetails.user_id.toString();
-
-      const serviceResponse = await CourseInfoService.getCourseInfoByStudent(
-        student_id
-      );
-
+  
+      const serviceResponse = await CourseInfoService.getCourseInfoByStudent(student_id);
+      const leave_details = await LeaveService.getLeaveByStudent(student_id);
+  
       for (let i = 0; i < serviceResponse.length; i++) {
-        const attendanceResponse =
-          await AttendanceService.getAttendanceByCourse(
-            serviceResponse[i].courseId
-          );
-
-        attendanceResponse.forEach((attendance) => {
+        let leaves = 0;
+        const attendanceResponse = await AttendanceService.getAttendanceByCourse(serviceResponse[i].courseId);
+  
+        for (const attendance of attendanceResponse) {
           const { date, topics } = attendance;
-          const courseIndex = serviceResponse.findIndex(
-            (course) => course.courseId === attendance.courseId
-          );
-
+          const courseIndex = serviceResponse.findIndex(course => course.courseId === attendance.courseId);
+  
+          for (const leave of leave_details) {
+            if (leave.status === "accepted") {
+              const fromDate = new Date(leave.fromDate);
+              const toDate = new Date(leave.toDate);
+              const newDate = new Date(date);
+  
+              if (newDate >= fromDate && newDate <= toDate) {
+                const newAttendanceRecord = await AttendanceService.getAttendanceByCourseAndDate(serviceResponse[i].courseId, newDate);
+                leaves += newAttendanceRecord.attendance_hours;
+                serviceResponse[i].absent_hours -= leaves;
+              }
+            }
+          }
+  
           if (courseIndex !== -1) {
             if (!serviceResponse[courseIndex].attendance) {
               serviceResponse[courseIndex].attendance = [];
             }
             serviceResponse[courseIndex].attendance.push({ date, topics });
           }
-        });
+  
+          serviceResponse[i].leave_hours = leaves;
+        }
       }
-
+  
       for (let i = 0; i < serviceResponse.length; i++) {
         const course = serviceResponse[i];
         if (course.courseId != null) {
-          const forCourseResponse = await CourseService.getCourseByID(
-            course.courseId
-          );
-
+          const forCourseResponse = await CourseService.getCourseByID(course.courseId);
+  
           if (typeof forCourseResponse === "string") {
             serviceResponse.splice(i, 1);
             i--;
             continue;
           }
-
+  
           course.courseId = forCourseResponse;
-
+  
           if (course.courseId && course.courseId.courseTeacher != null) {
-            const forFacultyResponse =
-              await FacultyService.getFacultyAccountDetails(
-                course.courseId.courseTeacher
-              );
+            const forFacultyResponse = await FacultyService.getFacultyAccountDetails(course.courseId.courseTeacher);
             course.courseId.courseTeacher = forFacultyResponse.name;
           }
         }
       }
-
+  
       if (typeof serviceResponse === "string") {
         res.status(200).json({
           success: false,
@@ -247,6 +257,7 @@ export default class CourseInfoController {
       });
     }
   }
+  
 
   static async apiGetCourseInfoDetailsByStudentForParent(req, res, next) {
     try {
