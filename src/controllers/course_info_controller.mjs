@@ -188,8 +188,11 @@ export default class CourseInfoController {
       for (let i = 0; i < serviceResponse.length; i++) {
         let leaves = 0;
         serviceResponse[i].leave_hours = leaves;
-        const attendanceResponse = await AttendanceService.getAttendanceByCourse(serviceResponse[i].courseId);
-  
+        const attendanceResponse =
+          await AttendanceService.getAttendanceByCourse(
+            serviceResponse[i].courseId
+          );
+
         for (const attendance of attendanceResponse) {
           const { date, topics } = attendance;
           const courseIndex = serviceResponse.findIndex(
@@ -292,7 +295,8 @@ export default class CourseInfoController {
       );
 
       for (let i = 0; i < serviceResponse.length; i++) {
-        let leaves = 0;
+        let leaves = 0;        
+        serviceResponse[i].leave_hours = leaves;
         const attendanceResponse =
           await AttendanceService.getAttendanceByCourse(
             serviceResponse[i].courseId
