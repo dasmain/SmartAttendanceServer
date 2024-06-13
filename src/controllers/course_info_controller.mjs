@@ -179,10 +179,12 @@ export default class CourseInfoController {
       const token = req.headers["authorization"];
       const tokenDetails = await TokenUtil.getStudentDataFromToken(token);
       const student_id = tokenDetails.user_id.toString();
-  
-      const serviceResponse = await CourseInfoService.getCourseInfoByStudent(student_id);
+
+      const serviceResponse = await CourseInfoService.getCourseInfoByStudent(
+        student_id
+      );
       const leave_details = await LeaveService.getLeaveByStudent(student_id);
-  
+
       for (let i = 0; i < serviceResponse.length; i++) {
         let leaves = 0;
         serviceResponse[i].leave_hours = leaves;
@@ -190,53 +192,67 @@ export default class CourseInfoController {
   
         for (const attendance of attendanceResponse) {
           const { date, topics } = attendance;
-          const courseIndex = serviceResponse.findIndex(course => course.courseId === attendance.courseId);
-  
+          const courseIndex = serviceResponse.findIndex(
+            (course) => course.courseId === attendance.courseId
+          );
+
           for (const leave of leave_details) {
             if (leave.status === "accepted") {
               const fromDate = new Date(leave.fromDate);
               const toDate = new Date(leave.toDate);
               const newDate = new Date(date);
-  
+
               if (newDate >= fromDate && newDate <= toDate) {
-                const newAttendanceRecord = await AttendanceService.getAttendanceByCourseAndDate(serviceResponse[i].courseId, newDate);
+                const newAttendanceRecord =
+                  await AttendanceService.getAttendanceByCourseAndDate(
+                    serviceResponse[i].courseId,
+                    newDate
+                  );
                 leaves += newAttendanceRecord.attendance_hours;
                 serviceResponse[i].absent_hours -= leaves;
+                if (serviceResponse[i].absent_hours < 0) {
+                  serviceResponse[i].absent_hours = 0;
+                }
               }
             }
           }
-  
+
           if (courseIndex !== -1) {
             if (!serviceResponse[courseIndex].attendance) {
               serviceResponse[courseIndex].attendance = [];
             }
             serviceResponse[courseIndex].attendance.push({ date, topics });
           }
-  
+
           serviceResponse[i].leave_hours = leaves;
         }
       }
-  
+
       for (let i = 0; i < serviceResponse.length; i++) {
         const course = serviceResponse[i];
         if (course.courseId != null) {
-          const forCourseResponse = await CourseService.getCourseByID(course.courseId);
-  
+          const forCourseResponse = await CourseService.getCourseByID(
+            course.courseId
+          );
+
           if (typeof forCourseResponse === "string") {
             serviceResponse.splice(i, 1);
             i--;
             continue;
           }
-  
+
           course.courseId = forCourseResponse;
-  
+
           if (course.courseId && course.courseId.courseTeacher != null) {
-            const forFacultyResponse = await FacultyService.getFacultyAccountDetails(course.courseId.courseTeacher);
+            const forFacultyResponse =
+              await FacultyService.getFacultyAccountDetails(
+                course.courseId.courseTeacher
+              );
             course.courseId.courseTeacher = forFacultyResponse.name;
           }
         }
       }
-  
+
       if (typeof serviceResponse === "string") {
         res.status(200).json({
           success: false,
@@ -258,7 +274,6 @@ export default class CourseInfoController {
       });
     }
   }
-  
 
   static async apiGetCourseInfoDetailsByStudentForParent(req, res, next) {
     try {
@@ -269,22 +284,46 @@ export default class CourseInfoController {
       const parentResponse = await ParentService.getParentAccountDetails(
         parent_id
       );
-
       const serviceResponse = await CourseInfoService.getCourseInfoByStudent(
+        parentResponse.studentID
+      );
+      const leave_details = await LeaveService.getLeaveByStudent(
         parentResponse.studentID
       );
 
       for (let i = 0; i < serviceResponse.length; i++) {
+        let leaves = 0;
         const attendanceResponse =
           await AttendanceService.getAttendanceByCourse(
             serviceResponse[i].courseId
           );
 
-        attendanceResponse.forEach((attendance) => {
+        for (const attendance of attendanceResponse) {
           const { date, topics } = attendance;
           const courseIndex = serviceResponse.findIndex(
             (course) => course.courseId === attendance.courseId
           );
+
+          for (const leave of leave_details) {
+            if (leave.status === "accepted") {
+              const fromDate = new Date(leave.fromDate);
+              const toDate = new Date(leave.toDate);
+              const newDate = new Date(date);
+
+              if (newDate >= fromDate && newDate <= toDate) {
+                const newAttendanceRecord =
+                  await AttendanceService.getAttendanceByCourseAndDate(
+                    serviceResponse[i].courseId,
+                    newDate
+                  );
+                leaves += newAttendanceRecord.attendance_hours;
+                serviceResponse[i].absent_hours -= leaves;
+                if (serviceResponse[i].absent_hours < 0) {
+                  serviceResponse[i].absent_hours = 0;
+                }
+              }
+            }
+          }
 
           if (courseIndex !== -1) {
             if (!serviceResponse[courseIndex].attendance) {
@@ -292,7 +331,9 @@ export default class CourseInfoController {
             }
             serviceResponse[courseIndex].attendance.push({ date, topics });
           }
-        });
+
+          serviceResponse[i].leaves = leaves;
+        }
       }
 
       for (let i = 0; i < serviceResponse.length; i++) {
