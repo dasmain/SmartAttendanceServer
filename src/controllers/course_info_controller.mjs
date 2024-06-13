@@ -185,6 +185,7 @@ export default class CourseInfoController {
   
       for (let i = 0; i < serviceResponse.length; i++) {
         let leaves = 0;
+        serviceResponse[i].leave_hours = leaves;
         const attendanceResponse = await AttendanceService.getAttendanceByCourse(serviceResponse[i].courseId);
   
         for (const attendance of attendanceResponse) {
